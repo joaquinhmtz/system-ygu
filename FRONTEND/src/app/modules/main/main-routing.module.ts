@@ -2,11 +2,22 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MainComponent } from './main/main.component';
+import { StartOffComponent } from './start-off/start-off.component';
 
 const routes: Routes = [
   {
     path: '',
     component: MainComponent,
+    children: [
+      {
+        path: "main",
+        component: StartOffComponent
+      },
+      {
+        path: 'users',
+        loadChildren: () => import(`./../users/users.module`).then(m => m.UsersModule)
+      }
+    ]
   }
 ];
 

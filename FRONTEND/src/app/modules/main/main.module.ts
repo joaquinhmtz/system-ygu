@@ -6,6 +6,8 @@ import { SidebarComponent } from './../../core/components/sidebar/sidebar.compon
 import { NavbarComponent } from './../../core/components/navbar/navbar.component';
 import { HeaderComponent } from './../../core/components/header/header.component';
 import { MainRoutingModule } from './main-routing.module';
+import { StartOffComponent } from './start-off/start-off.component';
+import { DropdownUserComponent } from './../../core/components/dropdown-user/dropdown-user.component';
 
 
 @NgModule({
@@ -13,7 +15,9 @@ import { MainRoutingModule } from './main-routing.module';
     MainComponent,
     SidebarComponent,
     NavbarComponent,
-    HeaderComponent
+    HeaderComponent,
+    StartOffComponent,
+    DropdownUserComponent
   ],
   imports: [
     CommonModule,

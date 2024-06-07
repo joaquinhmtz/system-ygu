@@ -1,0 +1,18 @@
+<div class="mt-4">
+    <h2 class="px-16 text-3xl leading-normal mt-4 mb-2 text-blueGray-900 font-bold">
+        Bienvenido a GYU
+    </h2>
+    <p class="px-16 leading-normal text-blueGray-900">
+        Este es un sistema de filtrado y almacenamiento para achivos en su equipo. Úselo para ver archivero, registrar movimiento, y encontrar archivos faltantes.
+    </p>
+    <div class="w-full grid gap-10 md:grid-cols-2 lg:grid-cols-3 mt-10">
+        <div class="flex flex-col justify-center items-center" *ngFor="let view of views">
+            <a [routerLink]="[view.path]" class="flex flex-col justify-center items-center">
+                <div class="bg-blueGray-600 rounded-full w-80 h-80 flex justify-center items-center">
+                    <img class="w-full h-full object-cover rounded-full hover:shadow-2xl" [src]="view.img" alt="">
+                </div>
+                <h3 class="font-semibold my-5">{{ view.title }}</h3>
+            </a>
+        </div>
+    </div>
+</div>
