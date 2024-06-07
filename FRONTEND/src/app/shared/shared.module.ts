@@ -2,16 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FooterSmallComponent } from '../core/components/footer-small/footer-small.component';
+import { DropdownTableComponent } from './components/dropdown-table/dropdown-table.component';
 
 @NgModule({
   declarations: [
-    FooterSmallComponent
+    FooterSmallComponent,
+    DropdownTableComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    FooterSmallComponent
+    FooterSmallComponent,
+    DropdownTableComponent
   ]
 })
 export class SharedModule { }

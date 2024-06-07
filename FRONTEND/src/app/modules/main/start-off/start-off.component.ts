@@ -10,7 +10,7 @@ export class StartOffComponent {
   views: any = [{
     title: "Archivero",
     img: "assets/imgs/archive.jpg",
-    path: "/app/login"
+    path: "/app/users"
   }, {
     title: "Registrar movimiento",
     img: "assets/imgs/register-mov.jpg",

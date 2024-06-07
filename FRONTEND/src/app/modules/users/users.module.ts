@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ListComponent } from './list/list.component';
 import { UsersRoutingModule } from './users-routing.module';
 import { FormComponent } from './form/form.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { FormComponent } from './form/form.component';
   ],
   imports: [
     CommonModule,
-    UsersRoutingModule
+    UsersRoutingModule,
+    SharedModule
   ]
 })
 export class UsersModule { }
