@@ -22,9 +22,6 @@ export class MainComponent implements OnInit {
       filter((event:any) => event instanceof NavigationStart),
       map((event: NavigationEnd) => event.url),
     ).subscribe((event:any) => {
-      console.log("aqui")
-      if (event.url !== "/app/main") this.hiddenSidebar = false;
-      else this.hiddenSidebar = true;
     });
   }
 

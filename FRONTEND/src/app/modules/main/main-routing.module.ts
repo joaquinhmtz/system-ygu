@@ -6,13 +6,13 @@ import { StartOffComponent } from './start-off/start-off.component';
 
 const routes: Routes = [
   {
+    path: "main",
+    component: StartOffComponent
+  },
+  {
     path: '',
     component: MainComponent,
     children: [
-      {
-        path: "main",
-        component: StartOffComponent
-      },
       {
         path: 'users',
         loadChildren: () => import(`./../users/users.module`).then(m => m.UsersModule)
