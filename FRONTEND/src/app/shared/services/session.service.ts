@@ -34,7 +34,7 @@ export class SessionService {
         });
       }, 300);
     } else {
-      this.swa.error(error.message, '');
+      this.swa.error("Ocurrió un error en el servidor", error.message);
     }
   }
 }

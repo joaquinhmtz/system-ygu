@@ -20,6 +20,6 @@ UserScheme.pre('save', function (next) {
     if (this.lastname2 != '') fullName += ' ' + this.lastname2;
     this.fullname = fullName;
     next();
-  });
+});
 
 module.exports = mongoose.model("Users", UserScheme);

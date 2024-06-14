@@ -2,6 +2,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+import { HttpService } from 'src/app/shared/services/http.service';
+import { SessionService } from 'src/app/shared/services/session.service';
+import { SweetalertService } from 'src/app/shared/services/sweetalert.service';
 
 @Component({
   selector: 'app-form',
@@ -13,9 +18,11 @@ export class FormComponent implements OnInit {
   @ViewChild("nameUser") nameUser!: ElementRef;
   @ViewChild('password') password!: ElementRef;
   @ViewChild('passwordConfirm') passwordConfirm!: ElementRef; 
+  @ViewChild('username') username!: ElementRef; 
   userForm:any = FormGroup;
   source: any;
   sourceConfirm: any;
+  sourceUsername: any;
   band: any = {
     submit: false,
     showPass: false,
@@ -24,12 +31,17 @@ export class FormComponent implements OnInit {
     samePass: true
   }
   catalogs: any = {
-    profiles: [{id:1,name:"Administrador"}]
+    profiles: []
   };
+  patternEmail: any = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/;
   patternPass: any = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#$%*.]).{8,}$/;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private http: HttpService,
+    private session: SessionService,
+    private swal: SweetalertService,
+    private router: Router
   ) {}
 
   ngAfterViewInit() {
@@ -38,6 +50,7 @@ export class FormComponent implements OnInit {
     },0); 
     this.source = fromEvent(this.password.nativeElement, 'keyup');
     this.sourceConfirm = fromEvent(this.passwordConfirm.nativeElement, 'keyup');
+    this.sourceUsername = fromEvent(this.username.nativeElement, 'keyup');
     this.source.pipe(debounceTime(100)).subscribe((c:any) => {
       if (this.userForm.controls["password"].value !== undefined || this.userForm.controls["password"].value !== null) {
         this.validatePassword();
@@ -48,16 +61,31 @@ export class FormComponent implements OnInit {
         this.validateSamePassword();
       }
     });
+    this.sourceUsername.pipe(debounceTime(100)).subscribe((c:any) => {
+      if (this.userForm.controls["username"].value !== undefined || this.userForm.controls["username"].value !== null) {
+        this.validateUniqueUsername();
+      }
+    });
   }
 
   ngOnInit() {
     this.initForm();
+    this.getProfiles();
   }
 
   save() {
     this.band.submit = true;
     if (!this.userForm.valid) return;
-    console.log("form valid***", this.userForm)
+    
+    this.swal.loading("Guardando usuario", "Espere un momento...");
+    this.http.HTTP_POST("/api/v1/users/save", this.userForm.value)
+      .subscribe((res:any) => {
+        this.swal.close();
+        this.swal.success("¡Guardado exitóso!", res.message);
+        this.router.navigate(["/app/users"]);
+      }, (err) => {
+        this.session.CheckError(err);
+      });
   }
 
   validatePassword() {
@@ -114,6 +142,25 @@ export class FormComponent implements OnInit {
       this.band.samePass = true;
       this.userForm.controls['password2'].setErrors(null);
     }
+  }
+
+  validateUniqueUsername() {
+    this.http.HTTP_GET("/api/v1/users/validate-username", { username: this.userForm.controls["username"].value })
+      .subscribe((res:any) => {
+        if (!res?.unique) this.userForm.controls['username'].setErrors({ 'notUnique': true });
+        else this.userForm.controls['username'].setErrors({ 'notUnique': false });
+      }, (err) => {
+        this.session.CheckError(err);
+      });
+  }
+
+  getProfiles() {
+    this.http.HTTP_GET("/api/v1/catalogs/profiles", {})
+      .subscribe((res:any) => {
+        this.catalogs.profiles = res;
+      }, (err) => {
+        this.session.CheckError(err);
+      });
   }
 
   initForm() {

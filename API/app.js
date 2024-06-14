@@ -10,6 +10,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const AccountSchema = require("./modules/models/account.scheme");
 const session = require('express-session');
 const dotenv = require('dotenv').config();
+let errorHandler = require("./middlewares/errorHandler.middleware");
 
 let uri = "mongodb://127.0.0.1:27017/ygu";
 
@@ -48,6 +49,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', router);
+app.use(errorHandler.errorHandler);
 
 app.listen(PORT, () => { 
     console.log(`Server is running on port ${PORT}`); 
