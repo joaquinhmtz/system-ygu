@@ -38,5 +38,33 @@ const ValidateUsername = async (req, res, next) => {
     }
 }
 
+const GetUsersCount = async (req, res, next) => {
+    try {
+        let data = req.body;
+        let count = await UserLib.GetCount(data);
+
+        res.status(200).send({ success: true, total: count });
+
+    } catch (e) {
+        console.log("Error - GetUsersCount: ", e);
+        next(e);
+    }
+}
+
+const GetUsersList = async (req, res, next) => {
+    try {
+        let data = req.body;
+        let users = await UserLib.GetList(data);
+
+        res.status(200).send({ success: true, data: users });
+
+    } catch (e) {
+        console.log("Error - GetUsersList: ", e);
+        next(e);
+    }
+}
+
 module.exports.SaveUser = SaveUser;
 module.exports.ValidateUsername = ValidateUsername;
+module.exports.GetUsersCount = GetUsersCount;
+module.exports.GetUsersList = GetUsersList;

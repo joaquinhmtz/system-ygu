@@ -1,5 +1,10 @@
 <div class="flex items-center justify-between mt-5">
-    <h3 class="font-bold mt-5 mb-2">Usuarios (2)</h3>
+    <h3 class="font-bold mt-5 mb-2">
+        Usuarios <span *ngIf="!band.counting">({{ total | number:'1.0-0' }})</span>
+        <b *ngIf="band.counting">
+            (<span style="font-size: 13px;" class="text-secondary"> Calculando...</span>)
+        </b>
+    </h3>
     <div class="flex justify-between">
         <button class="p-2 px-3 rounded-md btnFilter">
             <i class="fa fa-filter"></i>
@@ -33,35 +38,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                
+                <tr *ngFor="let item of users | paginate: {itemsPerPage: 10, currentPage: params?.pagination.page, totalItems: total}; index as i;">
                     <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                        1
+                        {{i+1}}
                     </th>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        Juan Fernando Gutiérrez Álvarez
+                        {{ item?.fullname || '-'}}
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <span>juan.fgad.sistemgyu</span>
+                        <span>{{ item?.username || '-'}}</span>
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <i class="fas fa-circle text-green-500 mr-2"></i> Activo
-                    </td>
-                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
-                        <app-dropdown-table></app-dropdown-table>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                        1
-                    </th>
-                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        Juan Fernando Gutiérrez Álvarez
-                    </td>
-                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <span>juan.fgad.sistemgyu</span>
-                    </td>
-                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <i class="fas fa-circle text-red-500 mr-2"></i> No activo
+                        <i class="fas fa-circle mr-2" [ngClass]="{'text-green-500': item.active, 'text-red-500': !item.active}"></i> {{ (item.active) ? "Activo" : "No activo" }}
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
                         <app-dropdown-table></app-dropdown-table>
@@ -70,4 +59,12 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="w-full mt-10 flex items-center justify-center" *ngIf="total > 0">
+    <pagination-controls
+        (pageChange)="GetData($event)"
+        previousLabel="Anterior"
+        nextLabel="Siguiente">
+    </pagination-controls>
 </div>

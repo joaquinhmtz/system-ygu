@@ -87,5 +87,9 @@ html, body {
     .ng-select.ng-select-disabled>.ng-select-container {
         background-color: #f9f9f9 !important;
     }
+      
+    .ngx-pagination .current, .btn-info {
+       background: #0084C7 !important;
+    }
 }
 

@@ -22,6 +22,7 @@
     "@ng-select/ng-select": "^10.0.4",
     "@popperjs/core": "^2.11.8",
     "@tailwindcss/forms": "^0.2.1",
+    "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.11.1",
     "tslib": "^2.3.0",

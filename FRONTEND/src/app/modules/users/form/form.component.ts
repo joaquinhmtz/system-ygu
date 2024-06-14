@@ -148,7 +148,7 @@ export class FormComponent implements OnInit {
     this.http.HTTP_GET("/api/v1/users/validate-username", { username: this.userForm.controls["username"].value })
       .subscribe((res:any) => {
         if (!res?.unique) this.userForm.controls['username'].setErrors({ 'notUnique': true });
-        else this.userForm.controls['username'].setErrors({ 'notUnique': false });
+        else this.userForm.controls['username'].setErrors(null);
       }, (err) => {
         this.session.CheckError(err);
       });
