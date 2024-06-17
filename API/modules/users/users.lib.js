@@ -30,7 +30,7 @@ const SaveUser = async (data) => {
 const GetCount = async (data) => {
     try {
         let query = UserUtils.GetQuery(data.filters);
-        let count = await UserScheme.find(query).count();
+        let count = await UserScheme.find(query).countDocuments();
 
         return count;
 
