@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { HttpService } from 'src/app/shared/services/http.service';
 import { SessionService } from 'src/app/shared/services/session.service';
+import { SweetalertService } from 'src/app/shared/services/sweetalert.service';
 
 @Component({
   selector: 'app-list',
@@ -9,7 +10,6 @@ import { SessionService } from 'src/app/shared/services/session.service';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-   color = "light";
 
    total: number = 0;
    users:Array<any> = [];
@@ -18,7 +18,7 @@ export class ListComponent implements OnInit {
     filters: {
       username: undefined,
       fullname: undefined,
-      active: true
+      status: true
     },
     pagination: {
       page: 1,
@@ -26,12 +26,14 @@ export class ListComponent implements OnInit {
     }
    };
    band: any = {
-    counting: true
+    counting: true,
+    showFilters: false
    };
 
    constructor(
     private http: HttpService,
-    private session: SessionService
+    private session: SessionService,
+    private swal: SweetalertService
    ) {}
 
    ngOnInit() {
@@ -39,6 +41,7 @@ export class ListComponent implements OnInit {
    }
 
    async GetData(event?:any) {
+    this.swal.loading("Cargando resultados...");
     if (event) this.params.pagination.page = event;
     await this.GetUsers();
     await this.GetTotal();
@@ -48,6 +51,7 @@ export class ListComponent implements OnInit {
     return new Promise<Boolean>((resolve, reject) => {
       this.http.HTTP_POST("/api/v1/users/list", this.params)
         .subscribe((res: any) => {
+          this.swal.close();
           this.users = res.data;
           resolve(true);
         }, err => {
@@ -66,5 +70,11 @@ export class ListComponent implements OnInit {
           this.session.CheckError(err);
         });
     });
+   }
+
+   SetDataFilters(e:any) {
+    this.params.pagination.page = 1;
+    this.params.filters = e;
+    this.GetData();
    }
 }

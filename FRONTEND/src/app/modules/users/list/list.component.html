@@ -1,3 +1,5 @@
+<app-filters *ngIf="band.showFilters" (sendDataFilters)="SetDataFilters($event)"></app-filters>
+
 <div class="flex items-center justify-between mt-5">
     <h3 class="font-bold mt-5 mb-2">
         Usuarios <span *ngIf="!band.counting">({{ total | number:'1.0-0' }})</span>
@@ -6,7 +8,7 @@
         </b>
     </h3>
     <div class="flex justify-between">
-        <button class="p-2 px-3 rounded-md btnFilter">
+        <button class="p-2 px-3 rounded-md btnFilter" (click)="band.showFilters=!band.showFilters">
             <i class="fa fa-filter"></i>
         </button>
         <button class="p-2 px-3 rounded-md btnFilter" routerLink="/app/users/new">

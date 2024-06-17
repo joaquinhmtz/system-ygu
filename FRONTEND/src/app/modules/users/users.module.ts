@@ -8,11 +8,13 @@ import { ListComponent } from './list/list.component';
 import { UsersRoutingModule } from './users-routing.module';
 import { FormComponent } from './form/form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { FiltersComponent } from './components/filters/filters.component';
 
 @NgModule({
   declarations: [
     ListComponent,
-    FormComponent
+    FormComponent,
+    FiltersComponent
   ],
   imports: [
     CommonModule,

@@ -3,7 +3,7 @@ const GetQuery = (data) => {
 
     if (data.username) query["username"] = new RegExp(data.username, "i");
     if (data.fullname) query["fullname"] = new RegExp(data.fullname, "i");
-    if (data.status) query["active"] = data.status;
+    query["active"] = data.status;
 
     return query;
 }

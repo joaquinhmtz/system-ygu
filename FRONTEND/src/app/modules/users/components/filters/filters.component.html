@@ -1,0 +1,56 @@
+<div class="flex items-center justify-between mt-2">
+    <h3 class="font-bold mt-5 mb-2">
+        Filtros
+    </h3>
+</div>
+
+<div class="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded bg-white">
+    <div class="flex-auto px-4 py-5">
+        <form [formGroup]="filtersForm">
+            <div class="flex flex-wrap">
+                <div class="w-full lg:w-6/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Nombre completo
+                        </label>
+                        <div class="flex">
+                            <input #nameUser type="text"
+                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="fullname" placeholder="Ej. Pedro Virrareal Juarez" (keyup.enter)="SendFiltersInfo()" />
+
+                            <button type="button" (click)="CleanFormcontrol('fullname')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-6/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Usuario
+                        </label>
+                        <div class="flex">
+                            <input #nameUser type="text"
+                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="username" placeholder="Ej. pedro.villareal" (keyup.enter)="SendFiltersInfo()" />
+
+                            <button type="button" (click)="CleanFormcontrol('username')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full px-4 mb-2">
+                    <div class="flex items-center justify-end">
+                        <label class="text-xs mr-2 font-bold text-blueGray-600 uppercase">{{(filtersForm.controls.status.value === true ? 'ACTIVOS' : 'NO ACTIVOS')}}</label>
+                        <label class="switch">
+                            <input type="checkbox" (click)="(filtersForm.controls.status.value === true ? filtersForm.controls.status.setValue(false) : filtersForm.controls.status.setValue(true)); SendFiltersInfo();"
+                            [checked]="filtersForm.controls.status.value === true">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
