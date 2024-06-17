@@ -72,6 +72,22 @@ export class ListComponent implements OnInit {
     });
    }
 
+   RemoveUser(user:any) {
+    this.swal.confirm(`¿Seguro que quieres inactivar al usuario ${user?.username}?`, '', (result:any) => {
+      if (result.value) {
+        this.swal.loading("Inactivando usuario", "Espere un momento...");
+        this.http.HTTP_POST("/api/v1/users/remove", user)
+          .subscribe((res:any) => {
+            this.swal.close();
+            this.swal.success(res.message);
+            this.GetData();
+          }, (err) => {
+            this.session.CheckError(err);
+          });
+      }
+    });
+   }
+
    SetDataFilters(e:any) {
     this.params.pagination.page = 1;
     this.params.filters = e;

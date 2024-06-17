@@ -55,7 +55,14 @@
                         <i class="fas fa-circle mr-2" [ngClass]="{'text-green-500': item.active, 'text-red-500': !item.active}"></i> {{ (item.active) ? "Activo" : "No activo" }}
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
-                        <app-dropdown-table></app-dropdown-table>
+                        <div class="flex justify-center">
+                            <button [routerLink]="['/app/users/edit', item._id]" class="bg-lightBlue-500 text-white active:bg-red-600 font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button *ngIf="item.active" type="button" (click)="RemoveUser(item)" class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 ml-5">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>

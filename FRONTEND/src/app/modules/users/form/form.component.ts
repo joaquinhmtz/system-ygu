@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { HttpService } from 'src/app/shared/services/http.service';
 import { SessionService } from 'src/app/shared/services/session.service';
@@ -23,6 +23,7 @@ export class FormComponent implements OnInit {
   source: any;
   sourceConfirm: any;
   sourceUsername: any;
+  actionForm: string = "save";
   band: any = {
     submit: false,
     showPass: false,
@@ -41,7 +42,8 @@ export class FormComponent implements OnInit {
     private http: HttpService,
     private session: SessionService,
     private swal: SweetalertService,
-    private router: Router
+    private router: Router,
+    private routeParams: ActivatedRoute
   ) {}
 
   ngAfterViewInit() {
@@ -69,16 +71,25 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.routeParams.params
+      .subscribe((params:any) => {
+        if (params && params.id) {
+          this.actionForm = "update";
+          this.getUser(params.id);
+        }
+    });
     this.initForm();
     this.getProfiles();
   }
 
-  save() {
+  sendForm() {
     this.band.submit = true;
     if (!this.userForm.valid) return;
     
+    if (this.actionForm === "update") this.userForm.controls["username"].enable();
+
     this.swal.loading("Guardando usuario", "Espere un momento...");
-    this.http.HTTP_POST("/api/v1/users/save", this.userForm.value)
+    this.http.HTTP_POST((this.actionForm === "save" ? "/api/v1/users/save" : "/api/v1/users/update"), this.userForm.value)
       .subscribe((res:any) => {
         this.swal.close();
         this.swal.success("¡Guardado exitóso!", res.message);
@@ -163,16 +174,58 @@ export class FormComponent implements OnInit {
       });
   }
 
+  getUser(_id:any) {
+    this.http.HTTP_GET(`/api/v1/users/byId/${_id}`)
+    .subscribe((res:any) => {
+      this.setUser(res.data);
+    }, (err) => {
+      this.session.CheckError(err);
+    });
+  }
+
+  setUser(user:any) {
+    this.userForm.setValue({
+      _id: user._id,
+      name: user.name,
+      lastname: user.lastname,
+      lastname2: user.lastname2,
+      fullname: user.fullname,
+      email: user.email,
+      username: user.username,
+      password: "",
+      password2: "",
+      profile: user.profile,
+      changePassword: false
+    });
+    this.userForm.controls["username"].disable();
+    this.userForm.controls["password"].disable();
+    this.userForm.controls["password2"].disable();
+  }
+
+  SetValidatorsPassword() {
+    if (this.userForm.controls["changePassword"].value) {
+      this.userForm.controls["password"].enable();
+      this.userForm.controls["password2"].enable();
+    } 
+    else {
+      this.userForm.controls["password"].disable();
+      this.userForm.controls["password2"].disable();
+    }
+  }
+
   initForm() {
     this.userForm = this.formBuilder.group({
+      _id: new FormControl(""),
       name: new FormControl("", Validators.required),
       lastname: new FormControl("", Validators.required),
       lastname2: new FormControl("", Validators.required),
+      fullname: new FormControl(""),
       email: new FormControl("", Validators.required),
       username: new FormControl("", Validators.required),
       password: new FormControl("", Validators.required),
       password2: new FormControl("", Validators.required),
       profile: new FormControl(undefined, Validators.required),
+      changePassword: new FormControl(false)
     })
   }
 }

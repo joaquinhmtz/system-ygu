@@ -16,6 +16,11 @@ const routes: Routes = [
     path: 'new',
     component: FormComponent,
     canActivate: [ AuthGuardService ],
+  },
+  {
+    path: 'edit/:id',
+    component: FormComponent,
+    canActivate: [ AuthGuardService ],
   }
 ];
 

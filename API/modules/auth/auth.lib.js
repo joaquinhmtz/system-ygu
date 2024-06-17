@@ -9,4 +9,13 @@ const SaveAccount = async (data) => {
     return account;
 }
 
+const RemoveAccount = async (data) => {
+    let account = AccountScheme.remove({ userId: data._id }, function(err, result) {
+        if(err) throw new Error(e);
+
+        return (true);
+    });
+}
+
 module.exports.SaveAccount = SaveAccount;
+module.exports.RemoveAccount = RemoveAccount;

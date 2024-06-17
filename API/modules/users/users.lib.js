@@ -54,7 +54,20 @@ const GetList = async (data) => {
     }
 }
 
+const UpdateUser = async (query, update) => {
+    try {
+        let upd = await UserScheme.updateOne(query, update);
+
+        return upd;
+
+    } catch (e) {
+        console.log("Err UpdateUser: ", e);
+        throw new Error(e);
+    }
+}
+
 module.exports.GetUser = GetUser;
 module.exports.SaveUser = SaveUser;
 module.exports.GetCount = GetCount;
 module.exports.GetList = GetList;
+module.exports.UpdateUser = UpdateUser;

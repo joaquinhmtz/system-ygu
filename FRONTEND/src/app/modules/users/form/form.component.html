@@ -1,11 +1,11 @@
 <div class="container my-10 flex flex-col min-w-0 break-words w-full shadow-lg rounded-lg bg-blueGray-100 border-0">
     <div class="rounded-t bg-white mb-0 px-6 py-6">
         <div class="text-center flex justify-between">
-            <h6 class="text-blueGray-700 text-xl font-bold">Nuevo usuario</h6>
+            <h6 class="text-blueGray-700 text-xl font-bold">{{ actionForm === "save" ? "Nuevo" : "Editar" }} usuario</h6>
         </div>
     </div>
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <form [formGroup]="userForm" (ngSubmit)="save()">
+        <form [formGroup]="userForm" (ngSubmit)="sendForm()">
             <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                 Datos personales
             </h6>
@@ -117,6 +117,16 @@
                             <span class="text-sm text-red-500 mt-1" *ngIf="userForm.controls['profile'].errors.required">El perfil es requerido</span>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="w-full px-4 mb-2" *ngIf="actionForm === 'update'">
+                <div class="flex items-center justify-end">
+                    <label class="text-xs mr-2 font-bold text-blueGray-600 uppercase">Cambiar contraseña</label>
+                    <label class="switch">
+                        <input type="checkbox" (click)="(userForm.controls.changePassword.value === false ? userForm.controls.changePassword.setValue(true) : userForm.controls.changePassword.setValue(false)); SetValidatorsPassword()"
+                        [checked]="userForm.controls.changePassword.value === true">
+                        <span class="slider round"></span>
+                    </label>
                 </div>
             </div>
             <div class="flex flex-wrap">

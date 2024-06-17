@@ -64,7 +64,57 @@ const GetUsersList = async (req, res, next) => {
     }
 }
 
+const RemoveUser = async (req, res, next) => {
+    try {
+        let data = req.body;
+        let account = await AccountLib.RemoveAccount(data);
+        let userUpd = await UserLib.UpdateUser({ _id : data._id }, { $set: { "active": false } });
+
+        res.status(200).send({ success: true, message: "El usuario inactivo con éxito" });
+
+    } catch (e) {
+        console.log("Error - RemoveUser: ", e);
+        next(e);
+    }
+}
+
+const GetUserById = async (req, res, next) => {
+    try {
+        let data = req.params;
+        console.log("data", data)
+        let user = await UserLib.GetUser({ _id: data.id });
+
+        res.status(200).send({ success: true, data: user });
+
+    } catch (e) {
+        console.log("Error - RemoveUser: ", e);
+        next(e);
+    }
+}
+
+const UpdateUser = async (req, res, next) => {
+    try {
+        let data = req.body;
+        data["fullname"] = data.name + " " + data.lastname + " " + data.lastname2;
+        let upd = await UserLib.UpdateUser({ _id: data._id }, { $set: data });
+        if (data.changePassword) {
+            let account = AccountLib.RemoveAccount(data);
+            data["userId"] = data._id;
+            let accountSave = await AccountLib.SaveAccount(data);
+        }
+
+        res.status(200).send({ success: true, message: "El usuario se actualizó correctamente" });
+
+    } catch (e) {
+        console.log("Error - UpdateUser: ", e);
+        next(e);
+    }
+}
+
 module.exports.SaveUser = SaveUser;
 module.exports.ValidateUsername = ValidateUsername;
 module.exports.GetUsersCount = GetUsersCount;
 module.exports.GetUsersList = GetUsersList;
+module.exports.RemoveUser = RemoveUser;
+module.exports.GetUserById = GetUserById;
+module.exports.UpdateUser = UpdateUser;

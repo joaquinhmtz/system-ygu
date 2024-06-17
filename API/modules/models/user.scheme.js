@@ -8,7 +8,10 @@ let UserScheme = new Scheme({
     fullname: { type: String, trim: true, uppercase: true },
     email: { type: String, trim: true },
     username: { type: String, trim: true, unique: true },
-    profile: { type: Scheme.Types.ObjectId, ref: 'Profiles' },
+    profile: { 
+        _id: { type: Scheme.Types.ObjectId },
+        name: { type: String, uppercase: true }
+    },
     creationDate: { type: Date, default: Date.now() },
     active: { type: Boolean, default: true }
 });

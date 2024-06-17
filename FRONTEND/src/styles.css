@@ -150,5 +150,30 @@ html, body {
     .slider.round:before {
         border-radius: 50%;
     }
+
+    input[type="text"]:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    input[type="number"]:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    input[type="password"]:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    input[type="checkbox"]:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    input[type="radio"]:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
 }
 
