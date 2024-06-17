@@ -10,6 +10,7 @@ module.exports = (app, router) => {
                     let user = await UserLib.GetUser({ _id: account.userId });
 
                     if (user) {
+                        console.log(app.secret)
                         let token = jwt.sign(user.toJSON(), app.secret, { expiresIn : "1d" });
                         
                         return res.status(200).send({ succes: true, token: token, user: user });
