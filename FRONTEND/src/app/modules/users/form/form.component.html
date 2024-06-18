@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <form [formGroup]="userForm" (ngSubmit)="sendForm()">
+        <form [formGroup]="userForm" (ngSubmit)="sendForm()" autocomplete="off">
             <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                 Datos personales
             </h6>
@@ -132,7 +132,7 @@
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-6/12 px-4 mb-2">
                     <div class="relative w-full mb-3">
-                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2 required" htmlFor="grid-password">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2 required">
                             Contraseña
                         </label>
                         <div class="flex">

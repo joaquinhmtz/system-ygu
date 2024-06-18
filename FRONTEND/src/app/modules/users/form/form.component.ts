@@ -86,6 +86,7 @@ export class FormComponent implements OnInit {
     this.band.submit = true;
     if (!this.userForm.valid) return;
     
+    if (this.actionForm === "save") this.userForm.removeControl("_id");
     if (this.actionForm === "update") this.userForm.controls["username"].enable();
 
     this.swal.loading("Guardando usuario", "Espere un momento...");
