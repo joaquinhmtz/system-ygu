@@ -44,35 +44,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Divider -->
-            <hr class="my-4 hidden md:block" />
-            <!-- Heading -->
-            <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                Usuarios
-            </h6>
-            <!-- Navigation -->
-
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-
-                <li class="items-center">
-                    <a [routerLink]="['/app/users']" class="text-xs uppercase py-3 font-bold block"
-                        routerLinkActive #adminUsers="routerLinkActive" [ngClass]="
-                        adminUsers.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' ">
-                        <i class="fas fa-users mr-2 text-sm" [ngClass]="adminUsers.isActive ? 'opacity-75' : 'text-blueGray-300'"></i>
-                        Listado
-                    </a>
-                </li>
-                <li class="items-center">
-                    <a [routerLink]="['/app/users/new']" class="text-xs uppercase py-3 font-bold block"
-                        routerLinkActive #adminUser="routerLinkActive" [ngClass]="
-                        adminUser.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' ">
-                        <i class="fas fa-plus mr-2 text-sm" [ngClass]="adminUser.isActive ? 'opacity-75' : 'text-blueGray-300'"></i>
-                        Nuevo
-                    </a>
-                </li>
-
-            </ul>
             <!-- Divider -->
             <hr class="my-4 hidden md:block" />
             <!-- Heading -->
@@ -85,7 +56,8 @@
                 <li class="items-center">
                     <a [routerLink]="['/app/movements/new']" class="text-xs uppercase py-3 font-bold block"
                         routerLinkActive #adminNewMovement="routerLinkActive" [ngClass]="
-                        adminNewMovement.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' ">
+                        adminNewMovement.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' "
+                        [routerLinkActiveOptions]="{exact: true}">
                         <i class="fas fa-plus mr-2 text-sm" [ngClass]="adminNewMovement.isActive ? 'opacity-75' : 'text-blueGray-300'"></i>
                         Nuevo
                     </a>
@@ -104,7 +76,8 @@
                 <li class="items-center">
                     <a [routerLink]="['/app/archive']" class="text-xs uppercase py-3 font-bold block"
                         routerLinkActive #adminArchive="routerLinkActive" [ngClass]="
-                        adminArchive.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' ">
+                        adminArchive.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' "
+                        [routerLinkActiveOptions]="{exact: true}">
                         <i class="fas fa-folder-open mr-2 text-sm" [ngClass]="adminArchive.isActive ? 'opacity-75' : 'text-blueGray-300'"></i>
                         Archivero
                     </a>
@@ -112,13 +85,44 @@
                 <li class="items-center">
                     <a [routerLink]="['/app/archive/missing']" class="text-xs uppercase py-3 font-bold block"
                         routerLinkActive #adminArchiveMissing="routerLinkActive" [ngClass]="
-                        adminArchiveMissing.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' ">
+                        adminArchiveMissing.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' "
+                        [routerLinkActiveOptions]="{exact: true}">
                         <i class="fas fa-file-export mr-2 text-sm" [ngClass]="adminArchiveMissing.isActive ? 'opacity-75' : 'text-blueGray-300'"></i>
                         Faltantes
                     </a>
                 </li>
 
             </ul>
+             <!-- Divider -->
+             <hr class="my-4 hidden md:block" />
+             <!-- Heading -->
+             <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                 Usuarios
+             </h6>
+             <!-- Navigation -->
+ 
+             <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+ 
+                 <li class="items-center">
+                     <a [routerLink]="['/app/users']" class="text-xs uppercase py-3 font-bold block"
+                         routerLinkActive #adminUsers="routerLinkActive" [ngClass]="
+                         adminUsers.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' "
+                         [routerLinkActiveOptions]="{exact: true}">
+                         <i class="fas fa-users mr-2 text-sm" [ngClass]="adminUsers.isActive ? 'opacity-75' : 'text-blueGray-300'"></i>
+                         Listado
+                     </a>
+                 </li>
+                 <li class="items-center">
+                     <a [routerLink]="['/app/users/new']" class="text-xs uppercase py-3 font-bold block"
+                         routerLinkActive #adminUser="routerLinkActive" [ngClass]="
+                         adminUser.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' "
+                         [routerLinkActiveOptions]="{exact: true}">
+                         <i class="fas fa-plus mr-2 text-sm" [ngClass]="adminUser.isActive ? 'opacity-75' : 'text-blueGray-300'"></i>
+                         Nuevo
+                     </a>
+                 </li>
+ 
+             </ul>
         </div>
     </div>
 </nav>
