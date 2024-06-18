@@ -10,14 +10,14 @@ export class StartOffComponent {
   views: any = [{
     title: "Archivero",
     img: "assets/imgs/archive.jpg",
-    path: "/app/users"
+    path: "/app/archive"
   }, {
     title: "Registrar movimiento",
     img: "assets/imgs/register-mov.jpg",
-    path: ""
+    path: "/app/movements/new"
   }, {
     title: "Archivos faltantes",
     img: "assets/imgs/search.jpg",
-    path: ""
+    path: "/app/archive/missing"
   }];
 }
