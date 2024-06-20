@@ -26,6 +26,10 @@ export class SessionService {
     return sessionStorage.getItem("token");
   }
 
+  Logout() {
+    sessionStorage.clear();
+  }
+
   CheckError (error:any) {
     if (error.status === 401 && error.message === 'Tu sesión ha expirado.' || error.status === 401 && error.message === 'Token no válido.') {
       setTimeout(() => {

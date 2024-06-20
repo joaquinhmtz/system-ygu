@@ -1,14 +1,35 @@
-<div class="container my-10 flex flex-col min-w-0 break-words w-full shadow-lg rounded-lg bg-blueGray-100 border-0">
+<div class="container my-10 flex flex-col min-w-0 break-words w-full shadow-lg rounded-lg bg-blueGray-100 border-0"
+*ngIf="!band.hiddenForm">
     <div class="rounded-t bg-white mb-0 px-6 py-6">
         <div class="text-center flex justify-between">
             <h6 class="text-blueGray-700 text-xl font-bold">Nuevo movimiento</h6>
         </div>
     </div> 
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <form  autocomplete="off">
-            <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                Datos personales
-            </h6>
+        <form [formGroup]="movementForm" autocomplete="off">
+
+            <app-pimp-xml-data 
+            *ngIf="band.typeRegister === 'xml'"
+            [setXmlData]="movementForm.value">
+            </app-pimp-xml-data>
+
+            <app-upload-documents 
+            (sendFiles)="SetFiles($event)"
+            (sendDeleteFile)="DeleteFile($event)">
+            </app-upload-documents>
+
+            <hr class="mt-6 border-b-1 border-blueGray-300">
+            <div class="flex justify-end mt-10">
+                <button class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"
+                routerLink="/app/archive">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </button>
+                <button type="button" (click)="SaveMovement()" class="bg-emerald-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 ml-5">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
         </form>
     </div>
 </div>
+
+<app-modal-type-movement #modalChooseType (sendXMLData)="SetXMLData($event)"></app-modal-type-movement>

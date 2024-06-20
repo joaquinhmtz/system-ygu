@@ -91,6 +91,29 @@ export class SweetalertService {
       }
     });
   }
+
+  confirmContent(title = '', text = '', callbackConfirm?:any) {
+    let options: any = {
+      icon: 'warning',
+      title : title,
+      html: `${text}`,
+      text: text,
+      allowOutsideClick : false,
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+      allowEscapeKey : true,
+      reverseButtons: true
+    };
+
+    Swal.fire(options).then(function (result){
+      if(result.value){
+        callbackConfirm(result);
+      }else{
+        callbackConfirm({ value: false });
+      }
+    });
+  }
   
   loading(title = '', text = '') {
     let options: any = {
