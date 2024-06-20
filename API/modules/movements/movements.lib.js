@@ -1,5 +1,6 @@
 let xml2js = require('xml2js');
 let fs = require('fs');
+const MovementScheme = require('../models/movement.scheme');
 
 const ReadFile = async (data) => {
     try {
@@ -52,5 +53,19 @@ const DeleteFile = async (data) => {
     }
 }
 
+const SaveMovement = async (data) => {
+    try {
+        let movement = new MovementScheme(data);
+        let save = await movement.save();
+
+        return save;
+
+    } catch (e) {
+        console.log("Err SaveMovement: ", e);
+        throw new Error(e);
+    }
+}
+
 module.exports.ReadFile = ReadFile;
 module.exports.DeleteFile = DeleteFile;
+module.exports.SaveMovement = SaveMovement;

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { FormComponent } from './form/form.component';
 import { MovementsRoutingModule } from './movements-routing.module';
@@ -19,7 +20,8 @@ import { UploadDocumentsComponent } from './components/upload-documents/upload-d
     CommonModule,
     MovementsRoutingModule,
     FormsModule, 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule
   ],
   entryComponents: [
     ModalTypeMovementComponent

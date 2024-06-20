@@ -10,5 +10,8 @@ module.exports = (app, router) => {
     /*** Documents API ***/
     router.post("/api/v1/movement/read-xml",[middlewareToken], upload.single('invoiceXml'), MovementCtrl.ReadXML);
     router.post("/api/v1/movement/upload-file", [middlewareToken], uploadFile.single('uploadFile'), MovementCtrl.UploadFile);
-    router.post("/api/v1/movement/delete-file", [middlewareToken], MovementCtrl.DeleteFile)
+    router.post("/api/v1/movement/delete-file", [middlewareToken], MovementCtrl.DeleteFile);
+
+    /*** Register API ***/
+    router.post("/api/v1/movement/save", [middlewareToken], MovementCtrl.SaveMovement);
 }

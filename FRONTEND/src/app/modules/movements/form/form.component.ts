@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ModalTypeMovementComponent } from '../components/modal-type-movement/modal-type-movement.component';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-
 import { SweetalertService } from 'src/app/shared/services/sweetalert.service';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { SessionService } from 'src/app/shared/services/session.service';
@@ -16,6 +16,11 @@ export class FormComponent implements OnInit {
 
   @ViewChild('modalChooseType', { static: true }) modalChooseType:any = ModalTypeMovementComponent;
   movementForm:any = FormGroup;
+  userLog: any;
+  catalogs: any = {
+    billingTypes : [{ name: "INGRESO" }, { name: "EGRESO" }],
+    clientTypes : [{ name: "CLIENTE" }, { name: "PROVEEDOR" }, { name: "ESTADO DE CUENTA" }]
+  };
   band: any = {
     typeRegister: "",
     hiddenForm: true,
@@ -26,11 +31,14 @@ export class FormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private swal: SweetalertService,
     private http: HttpService,
-    private session: SessionService
+    private session: SessionService,
+    private router: Router
   ){}
   
   ngOnInit(): void {
     this.initForm();
+    this.userLog = this.session.GetUser();
+    this.userLog = JSON.parse(this.userLog);
     setTimeout(() => {
       this.ChooseType();
     }, 300);
@@ -42,11 +50,17 @@ export class FormComponent implements OnInit {
 
     this.swal.confirmContent("¿Desea registrar el movimiento?", this.BuildSwalHTML(), (result:any) => {
       if (result.value) {
-        console.log("Se guarda");
+        this.swal.loading("Registrando movimiento", "Espere un momento...");
+        this.http.HTTP_POST("/api/v1/movement/save", this.movementForm.value)
+          .subscribe((res:any) => {
+            this.swal.close();
+            this.swal.success("¡Guardado exitóso!", res.message);
+            this.router.navigate(["/app/archive"]);
+          }, (err) => {
+            this.session.CheckError(err);
+          });
       }
     });
-
-    console.log("Válido");
   }
 
   SetXMLData(event: any) {
@@ -58,13 +72,20 @@ export class FormComponent implements OnInit {
   SetMovementForm(data:any) {
     this.movementForm.setValue({
       enterprise: data.enterprise,
-      client: data.client,
+      client: {
+        name: data.client.name,
+        rfc: data.client.rfc,
+        cfdi: data.client.cfdi,
+        type: null
+      },
       paymentMethod: data.paymentMethod ? data.paymentMethod : "",
       total: data.total,
       invoice: {
         invoiceDate: data.invoiceDate ? data.invoiceDate : undefined,
         invoiceFolio: data.invoiceFolio ? data.invoiceFolio : undefined,
         methodOfPayment: data.methodOfPayment ? data.methodOfPayment : undefined,
+        typeInvoice: null,
+        nameMovement: null
       },
       documents: {
         invoiceXML: "",
@@ -72,6 +93,10 @@ export class FormComponent implements OnInit {
         voucherOfPayment: "",
         partialXML: "",
         partialPDF: "",
+      },
+      user: {
+        _id : this.userLog._id,
+        fullname: this.userLog.fullname
       }
     });
   }
@@ -79,8 +104,6 @@ export class FormComponent implements OnInit {
   async SetFiles(event: any) {
     let url = await this.UploadFile(event.file);
     this.movementForm.controls["documents"].controls[event.controlName].setValue(url);
-    
-    console.log("movementForm***", this.movementForm.value);
   }
 
   UploadFile(file:File) {
@@ -144,7 +167,8 @@ export class FormComponent implements OnInit {
       }),
       client: this.formBuilder.group({
         name: new FormControl(undefined, Validators.required),
-        rfc: new FormControl(undefined, Validators.required),
+        type: new FormControl(undefined, Validators.required),
+        rfc: new FormControl(undefined),
         cfdi: new FormControl(undefined),
       }),
       paymentMethod: new FormControl(undefined, Validators.required),
@@ -152,7 +176,9 @@ export class FormComponent implements OnInit {
       invoice: this.formBuilder.group({
         invoiceDate: new FormControl(undefined),
         invoiceFolio: new FormControl(undefined),
-        methodOfPayment: new FormControl(undefined)
+        methodOfPayment: new FormControl(undefined),
+        typeInvoice: new FormControl(undefined, Validators.required),
+        nameMovement: new FormControl(undefined, Validators.required)
       }),
       documents: this.formBuilder.group({
         invoiceXML: new FormControl(undefined),
@@ -160,6 +186,10 @@ export class FormComponent implements OnInit {
         voucherOfPayment: new FormControl(undefined),
         partialXML: new FormControl(undefined),
         partialPDF: new FormControl(undefined),
+      }),
+      user: this.formBuilder.group({
+        _id : new FormControl(undefined),
+        fullname: new FormControl(undefined)
       })
     });
   }

@@ -38,7 +38,7 @@ export class UploadDocumentsComponent {
     accept: "application/pdf"
   },
   {
-    type: "Parcial1 (XML)",
+    type: "Complemento1 (XML)",
     controlName: "partialXML",
     size: undefined,
     realSize: undefined,
@@ -47,7 +47,7 @@ export class UploadDocumentsComponent {
     accept: ".xml"
   },
   {
-    type: "Parcial1 (PDF)",
+    type: "Complemento1 (PDF)",
     controlName: "partialPDF",
     size: undefined,
     realSize: undefined,

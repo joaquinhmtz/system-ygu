@@ -1,6 +1,9 @@
 const path = require('path');
 const rootPath = path.normalize(__dirname + '/../../');
 let MovementLib = require("./movements.lib");
+let ClientLib = require("./../clients/clients.lib");
+let EnterpriseLib = require("./../enterprises/enterprises.lib");
+let GlobalUtils = require("./../utils/global.utils");
 
 const ReadXML = async (req, res, next) => {
     try {
@@ -43,6 +46,31 @@ const DeleteFile = async (req, res, next) => {
     }
 }
 
+const SaveMovement = async (req, res, next) => {
+    try {
+        let data = req.body;
+        let existClient = await ClientLib.GetClient({ rfc: data.client.rfc });
+        if (existClient === null) {
+            let client = await ClientLib.SaveClient(data.client);
+            data.client["_id"] = client._id;
+        }
+        let existEnterprise = await EnterpriseLib.GetEnterprise({ rfc: data.enterprise.rfc });
+        if (existEnterprise === null) {
+            let enterprise = await EnterpriseLib.SaveEnterprise(data.enterprise);
+            data.enterprise["_id"] = enterprise._id;
+        }
+        let folio = await GlobalUtils.CreateFolio({ type: "movements" });
+        let save = await MovementLib.SaveMovement(data);
+
+        res.status(200).send({ success: true, message: "El registro fue guardado correctamente." });
+
+    } catch (e) {
+        console.log("Error - SaveMovement: ", e);
+        next(e);
+    }
+}
+
 module.exports.ReadXML = ReadXML;
 module.exports.UploadFile = UploadFile;
 module.exports.DeleteFile = DeleteFile;
+module.exports.SaveMovement = SaveMovement;

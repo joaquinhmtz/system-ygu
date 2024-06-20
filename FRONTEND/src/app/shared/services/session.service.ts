@@ -26,6 +26,10 @@ export class SessionService {
     return sessionStorage.getItem("token");
   }
 
+  GetUser() {
+    return sessionStorage.getItem('user');
+  }
+
   Logout() {
     sessionStorage.clear();
   }

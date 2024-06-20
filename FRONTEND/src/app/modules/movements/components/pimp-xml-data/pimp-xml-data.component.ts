@@ -24,7 +24,10 @@ export class PimpXmlDataComponent implements OnInit {
       rfc: undefined
     },
     paymentMethod: undefined,
-    total: 0
+    total: 0,
+    invoice: {
+      invoiceDate: undefined
+    }
   };
   
   ngOnInit(): void {

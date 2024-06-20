@@ -43,9 +43,9 @@
 </div>
 
 <h6 class="text-blueGray-400 text-sm mt-2 mb-3 font-bold uppercase">
-    Tipo de factura
+    Facturación
 </h6>
-<div class="flex flex-wrap">
+<div class="flex flex-wrap mb-5">
     <div class="w-full lg:w-6/12 mb-2">
         <h5 class="text-blueGray-400 uppercase font-bold text-xs">
             Tipo
@@ -60,6 +60,14 @@
         </h5>
         <span class="font-semibold text-md text-blueGray-700">
             ${{ (_setXmlData.total | number:'1.0-0') || "0" }}
+        </span>
+    </div>
+    <div class="w-full lg:w-6/12 mb-2">
+        <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+            Fecha facturación
+        </h5>
+        <span class="font-semibold text-md text-blueGray-700">
+            {{ (_setXmlData.invoice.invoiceDate | date: 'dd/MM/yyyy') || "-" }}
         </span>
     </div>
 </div>

@@ -13,6 +13,70 @@
             [setXmlData]="movementForm.value">
             </app-pimp-xml-data>
 
+            <div class="flex flex-wrap" formGroupName="client">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Tipo de cliente
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.clientTypes"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fclientType"
+                        placeholder="Selecciona un tipo de cliente"
+                        notFoundText="No se encontraron tipos de cliente."
+                        formControlName="type"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+
+                    <div *ngIf="movementForm.controls['client'].controls['type'].invalid && (movementForm.controls['client'].controls['type'].dirty || movementForm.controls['client'].controls['type'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['client'].controls['type'].errors?.required">El tipo de cliente es requerido</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap" formGroupName="invoice">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Tipo de facturación
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.billingTypes"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fbillingType"
+                        placeholder="Selecciona un tipo de facturación"
+                        notFoundText="No se encontraron tipos de facturación."
+                        formControlName="typeInvoice"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+
+                    <div *ngIf="movementForm.controls['invoice'].controls['typeInvoice'].invalid && (movementForm.controls['invoice'].controls['typeInvoice'].dirty || movementForm.controls['invoice'].controls['typeInvoice'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['invoice'].controls['typeInvoice'].errors?.required">El tipo de facturación es requerido</span>
+                    </div>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Movimiento
+                    </h5>
+                    <input #username type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="nameMovement" placeholder="Ej. (ISR, IVA, Banco, etc)"  />
+
+                    <div *ngIf="movementForm.controls['invoice'].controls['nameMovement'].invalid && (movementForm.controls['invoice'].controls['nameMovement'].dirty || movementForm.controls['invoice'].controls['nameMovement'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['invoice'].controls['nameMovement'].errors?.required">El movimiento es requerido</span>
+                    </div>
+                </div>
+            </div>
+
             <app-upload-documents 
             (sendFiles)="SetFiles($event)"
             (sendDeleteFile)="DeleteFile($event)">
