@@ -59,6 +59,13 @@ const SaveMovement = async (req, res, next) => {
             let enterprise = await EnterpriseLib.SaveEnterprise(data.enterprise);
             data.enterprise["_id"] = enterprise._id;
         }
+        if (data.extraDocuments && data.extraDocuments.length >= 1) {
+            let extraDocumentsTmp = [];
+            data.extraDocuments.forEach(file => {
+                extraDocumentsTmp.push(file.path);
+            });
+            data.extraDocuments = extraDocumentsTmp;
+        }
         let folio = await GlobalUtils.CreateFolio({ type: "movements" });
         let save = await MovementLib.SaveMovement(data);
 

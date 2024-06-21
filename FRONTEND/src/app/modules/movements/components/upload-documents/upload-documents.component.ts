@@ -1,17 +1,21 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-upload-documents',
   templateUrl: './upload-documents.component.html',
   styleUrls: ['./upload-documents.component.css']
 })
-export class UploadDocumentsComponent {
+export class UploadDocumentsComponent implements OnInit {
 
   @Output() sendFiles = new EventEmitter<Object>();
   @Output() sendDeleteFile = new EventEmitter<Object>();
+  @Input() paymentMethod:any = String;
+  @Input('changePaymentMethod') changePaymentMethod:any = Subject;
   
+  documentsRequiredBackup = [];
   documentsRequired: any = [{
-    type: "Facura (XML)",
+    type: "Factura (XML)",
     controlName: "invoiceXML",
     size: undefined,
     realSize: undefined,
@@ -20,7 +24,7 @@ export class UploadDocumentsComponent {
     accept: ".xml"
   },
   {
-    type: "Facura (PDF)",
+    type: "Factura (PDF)",
     controlName: "invoicePDF",
     size: undefined,
     realSize: undefined,
@@ -56,6 +60,28 @@ export class UploadDocumentsComponent {
     accept: "application/pdf"
   }];
 
+  constructor(){}
+
+  ngOnInit(): void {
+    this.documentsRequiredBackup = this.documentsRequired;
+    this.InitRequiredDocuments();
+    this.changePaymentMethod.subscribe((e:any) => {
+      this.paymentMethod = e;
+      this.InitRequiredDocuments();
+    });
+    
+  }
+
+  InitRequiredDocuments() {
+    this.documentsRequired = this.documentsRequiredBackup;
+
+    if (this.paymentMethod !== null || this.paymentMethod !== undefined || this.paymentMethod !== "") {
+      if (this.paymentMethod === "PUE") {
+        this.documentsRequired.splice(3, 2);
+      }
+    }
+  }
+
   UploadFile(event:any, typeFile:string) {
     const file:File = event.target.files[0];
 
@@ -72,19 +98,39 @@ export class UploadDocumentsComponent {
     }
   }
 
+  UploadExtraFile(event:any) {
+    const file:File = event.target.files[0];
+
+    this.documentsRequired.push({
+      type: "Archivo (S/Clasificación)",
+      size: file.size,
+      realSize: this.GetFileSize(file.size),
+      file: file,
+      fileName: file.name,
+      controlName: "extraDocuments",
+      index: 0
+    });
+    this.documentsRequired[this.documentsRequired.length-1].index = (this.documentsRequired.length-1);
+
+    this.sendFile(this.documentsRequired[this.documentsRequired.length-1]);
+  }
+
   sendFile(file:any) {
     this.sendFiles.emit(file);
   }
 
-  deleteFile(file:any) {
+  deleteFile(file:any, index:number) {
     this.documentsRequired.forEach((item:any, index:number) => {
-      if (item.type === file.type) {
-        item.size = undefined;
-        item.realSize = undefined;
-        item.file = undefined;
-        item.fileName = undefined;
+      if (file.type !== "Archivo (S/Clasificación)") {
+        if (item.type === file.type) {
+          item.size = undefined;
+          item.realSize = undefined;
+          item.file = undefined;
+          item.fileName = undefined;
+        }
       }
     });
+    if (file.type === "Archivo (S/Clasificación)") this.documentsRequired.splice(index, 1);
     this.sendDeleteFile.emit(file);
   }
 

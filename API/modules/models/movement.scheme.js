@@ -31,6 +31,7 @@ let MovementScheme = new Scheme({
         partialXML: { type: String, trim: true },
         partialPDF: { type: String, trim: true },
     },
+    extraDocuments: [{ type: String, trim: true }],
     user: {
         _id: { type: Scheme.Types.ObjectId },
         fullname: { type: String, trim: true, uppercase: true },

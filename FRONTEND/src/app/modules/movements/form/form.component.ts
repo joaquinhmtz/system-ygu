@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ModalTypeMovementComponent } from '../components/modal-type-movement/modal-type-movement.component';
+import { UploadDocumentsComponent } from '../components/upload-documents/upload-documents.component';
 import { SweetalertService } from 'src/app/shared/services/sweetalert.service';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { SessionService } from 'src/app/shared/services/session.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-form',
@@ -15,6 +17,8 @@ import { SessionService } from 'src/app/shared/services/session.service';
 export class FormComponent implements OnInit {
 
   @ViewChild('modalChooseType', { static: true }) modalChooseType:any = ModalTypeMovementComponent;
+  changePaymentMethod:Subject<any> = new Subject();
+
   movementForm:any = FormGroup;
   userLog: any;
   catalogs: any = {
@@ -97,13 +101,15 @@ export class FormComponent implements OnInit {
       user: {
         _id : this.userLog._id,
         fullname: this.userLog.fullname
-      }
+      },
+      extraDocuments: []
     });
   }
 
   async SetFiles(event: any) {
     let url = await this.UploadFile(event.file);
-    this.movementForm.controls["documents"].controls[event.controlName].setValue(url);
+    if (event.type === "Archivo (S/Clasificación)") this.extraDocuments.push(this.formBuilder.group({path: new FormControl(url), index: new FormControl(event.index)}));
+    else this.movementForm.controls["documents"].controls[event.controlName].setValue(url);
   }
 
   UploadFile(file:File) {
@@ -125,11 +131,20 @@ export class FormComponent implements OnInit {
   }
 
   DeleteFile(event:any) {
-    let url = this.returnDocumentValue(event.controlName);
+    let url;
+    if (event.controlName !== "extraDocuments") url = this.returnDocumentValue(event.controlName);
+    else {
+      this.extraDocuments.value.forEach((item:any, index:number) => {
+        if (event.index == item.index) {
+          url = item.path;
+          this.extraDocuments.removeAt(index);
+        }
+      });
+    }
 
     this.http.HTTP_POST("/api/v1/movement/delete-file", { path: url })
       .subscribe((res:any) => {
-        this.movementForm.controls["documents"].controls[event.controlName].setValue("");
+        if (event.controlName !== "extraDocuments") this.movementForm.controls["documents"].controls[event.controlName].setValue("");
       }, (err) => {
         this.session.CheckError(err);
       });
@@ -147,11 +162,13 @@ export class FormComponent implements OnInit {
     if (this.returnDocumentValue("voucherOfPayment") === undefined || this.returnDocumentValue("voucherOfPayment") === null || this.returnDocumentValue("voucherOfPayment") === "") {
       html += "<li> Falta archivo <b>Comprobante de pago (PDF)</b>";
     }
-    if (this.returnDocumentValue("partialXML") === undefined || this.returnDocumentValue("partialXML") === null || this.returnDocumentValue("partialXML") === "") {
-      html += "<li> Falta archivo <b>Parcial1 (XML)</b>";
-    }
-    if (this.returnDocumentValue("partialPDF") === undefined || this.returnDocumentValue("partialPDF") === null || this.returnDocumentValue("partialPDF") === "") {
-      html += "<li> Falta archivo <b>Parcial1 (PDF)</b>";
+    if (this.movementForm.value.paymentMethod === "PPU") {
+      if (this.returnDocumentValue("partialXML") === undefined || this.returnDocumentValue("partialXML") === null || this.returnDocumentValue("partialXML") === "") {
+        html += "<li> Falta archivo <b>Parcial1 (XML)</b>";
+      }
+      if (this.returnDocumentValue("partialPDF") === undefined || this.returnDocumentValue("partialPDF") === null || this.returnDocumentValue("partialPDF") === "") {
+        html += "<li> Falta archivo <b>Parcial1 (PDF)</b>";
+      }
     }
 
     html+="</ul>";
@@ -187,6 +204,7 @@ export class FormComponent implements OnInit {
         partialXML: new FormControl(undefined),
         partialPDF: new FormControl(undefined),
       }),
+      extraDocuments: this.formBuilder.array([]),
       user: this.formBuilder.group({
         _id : new FormControl(undefined),
         fullname: new FormControl(undefined)
@@ -196,6 +214,14 @@ export class FormComponent implements OnInit {
 
   returnDocumentValue(field:any) {
     return this.movementForm.controls["documents"].controls[field].value;
+  }
+
+  get extraDocuments() {
+    return this.movementForm.controls["extraDocuments"] as FormArray;
+  }
+
+  SendPaymentMethod() {
+    this.changePaymentMethod.next(this.movementForm.controls.paymentMethod.value);
   }
 
   ChooseType() {
