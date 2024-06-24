@@ -2,7 +2,16 @@ const path = require('path');
 const rootPath = path.normalize(__dirname + '/../../');
 const multer = require('multer');
 const upload = multer({ dest: `${rootPath}/public/uploads-xml/` });
-const uploadFile = multer({ dest: `${rootPath}/public/uploads/documents/` });
+//const uploadFile = multer({ dest: `${rootPath}/public/uploads/documents/` });
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, `${rootPath}/public/uploads/documents/`)
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+});
+const uploadFile = multer({ storage });
 let MovementCtrl = require("./movements.ctrl");
 let middlewareToken = require("./../../middlewares/auth.middleware").tokenValid;
 

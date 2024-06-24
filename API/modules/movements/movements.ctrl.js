@@ -66,7 +66,7 @@ const SaveMovement = async (req, res, next) => {
             });
             data.extraDocuments = extraDocumentsTmp;
         }
-        let folio = await GlobalUtils.CreateFolio({ type: "movements" });
+        data["folio"] = await GlobalUtils.CreateFolio({ type: "movements" });
         let save = await MovementLib.SaveMovement(data);
 
         res.status(200).send({ success: true, message: "El registro fue guardado correctamente." });

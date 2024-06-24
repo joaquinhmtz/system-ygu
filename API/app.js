@@ -1,6 +1,7 @@
 let express = require('express');
 let app = express();
 const router = express.Router();
+const cors = require('cors');
 const bodyParser = require("body-parser");
 const routes = require("./modules/routes")(app, router);
 const PORT = process.env.PORT || 5001; 
@@ -32,10 +33,11 @@ passport.deserializeUser(AccountSchema.deserializeUser());
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers");
     next();
 });
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -44,11 +46,12 @@ app.use(session({
     secret: process.env.SECRET,
     resave: false ,
     saveUninitialized: true ,
-}))
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', router);
+app.use(express.static(__dirname + '/public'));
 app.use(errorHandler.errorHandler);
 
 app.listen(PORT, () => { 

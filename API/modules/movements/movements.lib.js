@@ -66,6 +66,19 @@ const SaveMovement = async (data) => {
     }
 }
 
+const GetMovement = async (data) => {
+    try {
+        let movement = await MovementScheme.findOne({ _id: data._id });
+
+        return movement;
+        
+    } catch (e) {
+        console.log("Err GetMovement: ", e);
+        throw new Error(e);
+    }
+}
+
 module.exports.ReadFile = ReadFile;
 module.exports.DeleteFile = DeleteFile;
 module.exports.SaveMovement = SaveMovement;
+module.exports.GetMovement = GetMovement;

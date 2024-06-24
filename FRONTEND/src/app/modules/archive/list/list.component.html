@@ -1,1 +1,147 @@
-<p>list works!</p>
+<div class="flex items-center justify-between mt-5">
+    <h3 class="font-bold mt-5 mb-2">
+        Archivero <span *ngIf="!band.counting">({{ total | number:'1.0-0' }})</span>
+        <b *ngIf="band.counting">
+            (<span style="font-size: 13px;" class="text-secondary"> Calculando...</span>)
+        </b>
+    </h3>
+    <div class="flex justify-between">
+        <button class="p-2 px-3 rounded-md btnFilter" (click)="band.showFilters=!band.showFilters">
+            <i class="fa fa-filter"></i>
+        </button>
+    </div>
+</div>
+
+<div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
+    <div class="block w-full overflow-x-auto">
+        <table class="items-center w-full bg-transparent border-collapse">
+            <thead>
+                <tr>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        #
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Empresa
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Cliente
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Movimiento
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Archivos
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100 text-center">
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr *ngFor="let item of archives | paginate: {itemsPerPage: 10, currentPage: params?.pagination.page, totalItems: total}; index as i;">
+                    <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
+                        {{i+1}}
+                    </th>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div>
+                                <b>{{ item?.enterprise?.rfc || '-' }}</b>
+                            </div>
+                            <div>
+                                {{ item?.enterprise?.name || '-' }}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div>
+                                {{ item.invoice.typeInvoice || '-' }}
+                            </div>
+                            <div>
+                                <b>{{ item.client.name || '-' }}</b>
+                            </div>
+                            <div>
+                                {{ item.client.type || '-' }}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div>
+                                <b>{{ item.folio || '-' }}</b>
+                            </div>
+                            <div>
+                                {{ (item.invoice.invoiceDate | date: 'dd/MM/yyyy') || '-' }}
+                            </div>
+                            <div>
+                                ${{ (item.total | number:'1.0-0') || '0' }}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF !== 0">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.invoicePDF)">Factura (PDF)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.invoicePDF)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF === 0">
+                                <span>Factura (PDF)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML !== 0">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.invoiceXML)">Factura (XML)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.invoiceXML)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML === 0">
+                                <span>Factura (XML)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment !== 0">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.voucherOfPayment)">Comprobante (PDF)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.voucherOfPayment)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment === 0">
+                                <span>Comprobante (PDF)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialPDF !== 0">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.partialPDF)">Complemento1 (PDF)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.partialPDF)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialPDF === 0">
+                                <span>Complemento1 (PDF)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML !== 0">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.partialXML)">Complemento1 (XML)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.partialXML)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML === 0">
+                                <span>Complemento1 (XML)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
+                        <div class="flex justify-center">
+                            <button (click)="GenerateZip(item)" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-download"></i> ZIP
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

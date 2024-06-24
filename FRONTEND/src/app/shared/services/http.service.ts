@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Observable  } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
@@ -29,6 +29,26 @@ export class HttpService {
       .get(`${this.API}${endpoint}`,{params:params})
       .pipe(catchError(this.handleError))
   }
+
+  HTTP_DOWNLOAD(url:string): Observable<Blob> {
+		return this.http.get(url, {
+			responseType: 'blob'
+		})
+	}
+  
+  HTTP_DOWNLOAD_ZIP(server: string, url:string) {
+		return this.http.get(`${server}/api/v1/archive/download-zip/${url}`, { responseType: 'blob' }).pipe(
+      map((res: Blob) => {
+        return res;
+      })
+    );
+	}
+
+  // downloadfile(filePath: string){
+  //   return this.http
+  //       .get( URL_API_REST + 'downloadMaj?filePath='+ filePath)
+  //       .map(res => new Blob([res], {type: 'application/zip'}))
+//}
 
   private handleError(error: HttpErrorResponse){
 		return throwError(error.error);

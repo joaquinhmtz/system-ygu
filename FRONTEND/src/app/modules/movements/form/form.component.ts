@@ -162,7 +162,7 @@ export class FormComponent implements OnInit {
     if (this.returnDocumentValue("voucherOfPayment") === undefined || this.returnDocumentValue("voucherOfPayment") === null || this.returnDocumentValue("voucherOfPayment") === "") {
       html += "<li> Falta archivo <b>Comprobante de pago (PDF)</b>";
     }
-    if (this.movementForm.value.paymentMethod === "PPU") {
+    if (this.movementForm.value.paymentMethod === "PPD") {
       if (this.returnDocumentValue("partialXML") === undefined || this.returnDocumentValue("partialXML") === null || this.returnDocumentValue("partialXML") === "") {
         html += "<li> Falta archivo <b>Parcial1 (XML)</b>";
       }
