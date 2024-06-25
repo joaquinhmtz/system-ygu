@@ -76,6 +76,12 @@ export class ListComponent implements OnInit {
     });
   }
 
+  SetDataFilters(e:any) {
+    this.params.pagination.page = 1;
+    this.params.filters = e;
+    this.GetData();
+   }
+
   View(url:string) {
     let path = environment.server + '/' + url;
     window.open(path, '_blank');

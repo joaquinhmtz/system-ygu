@@ -1,3 +1,5 @@
+<app-filters *ngIf="band.showFilters" (sendDataFilters)="SetDataFilters($event)"></app-filters>
+
 <div class="flex items-center justify-between mt-5">
     <h3 class="font-bold mt-5 mb-2">
         Archivero <span *ngIf="!band.counting">({{ total | number:'1.0-0' }})</span>
@@ -144,4 +146,12 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="w-full mt-10 flex items-center justify-center" *ngIf="total > 0">
+    <pagination-controls
+        (pageChange)="GetData($event)"
+        previousLabel="Anterior"
+        nextLabel="Siguiente">
+    </pagination-controls>
 </div>

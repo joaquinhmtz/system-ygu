@@ -1,0 +1,147 @@
+<div class="flex items-center justify-between mt-2">
+    <h3 class="font-bold mt-5 mb-2">
+        Filtros
+    </h3>
+</div>
+
+<div class="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded bg-white">
+    <div class="flex-auto px-4 py-5">
+        <form [formGroup]="filtersForm">
+            <div class="flex flex-wrap">
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Empresa
+                        </label>
+                        <div class="flex">
+                            <input #nameUser type="text"
+                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="enterprise" placeholder="Ej. Pedro Virrareal Juarez" (keyup.enter)="SendFiltersInfo()" />
+
+                            <button type="button" (click)="CleanFormcontrol('enterprise')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Cliente
+                        </label>
+                        <div class="flex">
+                            <input #nameUser type="text"
+                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="client" placeholder="Ej. Pasteleria Rosita" (keyup.enter)="SendFiltersInfo()" />
+
+                            <button type="button" (click)="CleanFormcontrol('client')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Tipo facturación
+                        </label>
+                        <div class="flex">
+                            <ng-select
+                                [items]="catalogs.billingTypes"
+                                [multiple]="false"
+                                [closeOnSelect]="true"
+                                bindLabel="name"
+                                bindValue="name" 
+                                name="fbillingType"
+                                placeholder="Selecciona un tipo de facturación"
+                                notFoundText="No se encontraron tipos de facturación."
+                                formControlName="typeInvoice"
+                                class="border-0 bg-white rounded shadow mt-1 w-full"
+                                autocomplete="false"
+                                (change)="SendFiltersInfo()"
+                                    >
+                            </ng-select>
+
+                            <button type="button" (click)="CleanFormcontrol('typeInvoice')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Tipo cliente
+                        </label>
+                        <div class="flex">
+                            <ng-select
+                                [items]="catalogs.clientTypes"
+                                [multiple]="false"
+                                [closeOnSelect]="true"
+                                bindLabel="name"
+                                bindValue="name" 
+                                name="fclientType"
+                                placeholder="Selecciona un tipo de cliente"
+                                notFoundText="No se encontraron tipos de cliente."
+                                formControlName="type"
+                                class="border-0 bg-white rounded shadow mt-1 w-full"
+                                autocomplete="false"
+                                (change)="SendFiltersInfo()"
+                                    >
+                            </ng-select>
+
+                            <button type="button" (click)="CleanFormcontrol('type')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Fecha facturación (Inicio)
+                        </label>
+                        <div class="flex">
+                            <input type="date" class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="initDate" placeholder="Ej. " (change)="SendFiltersInfo()">
+
+                            <button type="button" (click)="CleanFormcontrol('initDate')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Fecha facturación (Fin)
+                        </label>
+                        <div class="flex">
+                            <input type="date" class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="endDate" placeholder="Ej. " [min]="filtersForm.value.initDate" (change)="SendFiltersInfo()">
+
+                            <button type="button" (click)="CleanFormcontrol('endDate')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Monto (${{filtersForm.value.total | number:'1.0-0'}}.00)
+                        </label>
+                        <div class="flex">
+                            <input type="range" class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="total" min="1" max="100000" placeholder="Ej. " (change)="SendFiltersInfo()">
+
+                            <button type="button" (click)="CleanFormcontrol('total')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
