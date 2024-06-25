@@ -1,3 +1,4 @@
+let mongoose = require('mongoose');
 let CountersScheme = require("./../models/counter.scheme");
 
 function GetQueryPager (pager) {
@@ -33,5 +34,10 @@ const CreateFolio = async (data) => {
     }
 }
 
+function CreateObjectId (id) {
+    return mongoose.Types.ObjectId(id);
+}
+
 module.exports.GetQueryPager = GetQueryPager;
 module.exports.CreateFolio = CreateFolio;
+module.exports.CreateObjectId = CreateObjectId;

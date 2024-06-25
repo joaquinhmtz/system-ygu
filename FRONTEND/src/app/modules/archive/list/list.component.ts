@@ -19,9 +19,6 @@ export class ListComponent implements OnInit {
   p: any;
   params: any = {
     filters: {
-      username: undefined,
-      fullname: undefined,
-      status: true
     },
     pagination: {
       page: 1,
@@ -49,7 +46,7 @@ export class ListComponent implements OnInit {
     if (event) this.params.pagination.page = event;
     await this.GetArchive();
     await this.GetTotal();
-   }
+  }
 
   GetArchive() {
     return new Promise<Boolean>((resolve, reject) => {

@@ -1,1 +1,183 @@
-<p>missing-list works!</p>
+<div class="flex items-center justify-between mt-5">
+    <h3 class="font-bold mt-5 mb-2">
+        Archivos faltantes <span *ngIf="!band.counting">({{ total | number:'1.0-0' }})</span>
+        <b *ngIf="band.counting">
+            (<span style="font-size: 13px;" class="text-secondary"> Calculando...</span>)
+        </b>
+    </h3>
+    <div class="flex justify-between">
+        <button class="p-2 px-3 rounded-md btnFilter" (click)="band.showFilters=!band.showFilters">
+            <i class="fa fa-filter"></i>
+        </button>
+    </div>
+</div>
+
+<div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
+    <div class="block w-full overflow-x-auto">
+        <table class="items-center w-full bg-transparent border-collapse">
+            <thead>
+                <tr>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        #
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Empresa
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Cliente
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Factura
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Comprobante
+                    </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100 text-center">
+                        Complemento
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr *ngFor="let item of archives | paginate: {itemsPerPage: 10, currentPage: params?.pagination.page, totalItems: total}; index as i;">
+                    <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
+                        {{i+1}}
+                    </th>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div>
+                                <b>{{ item?.enterprise?.rfc || '-' }}</b>
+                            </div>
+                            <div>
+                                {{ item?.enterprise?.name || '-' }}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div>
+                                {{ item.invoice.typeInvoice || '-' }}
+                            </div>
+                            <div>
+                                <b>{{ item.client.name || '-' }}</b>
+                            </div>
+                            <div>
+                                {{ item.client.type || '-' }}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF !== 0">
+                                <a class="link cursor-pointer hover:underline mt-1" (click)="View(item.documents?.invoicePDF)">
+                                    <i class="fas fa-check mr-1 text-emerald-500"></i>Factura (PDF)
+                                </a>
+                                <a class="link cursor-pointer hover:underline mt-1" (click)="Download(item.documents?.invoicePDF)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF === 0">
+                                <span class="link-missing mt-1">
+                                    <i class="fas fa-times mr-1 text-red-500"></i><span>Factura (PDF)</span>
+                                </span>
+                                <input id="file-upload-invoicepdf" name="file-upload-invoicepdf" type="file" class="sr-only" accept="application/pdf" #fileUploadInvoicepdf max-size="2000" (change)="UploadFile($event, item, 'invoicePDF')"/>
+                                <a class="link-missing cursor-pointer hover:underline mt-1" (click)="fileUploadInvoicepdf.click()">
+                                    <i class="fas fa-upload"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML !== 0">
+                                <a class="link cursor-pointer hover:underline mt-1" (click)="View(item.documents?.invoiceXML)">
+                                    <i class="fas fa-check mr-1 text-emerald-500"></i>Factura (XML)
+                                </a>
+                                <a class="link cursor-pointer hover:underline mt-1" (click)="Download(item.documents?.invoiceXML)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML === 0">
+                                <span class="link-missing mt-1">
+                                    <i class="fas fa-times mr-1 text-red-500"></i><span>Factura (XML)</span>
+                                </span>
+                                <input id="file-upload-invoicexml" name="file-upload-invoicexml" type="file" class="sr-only" accept=".xml" #fileUploadInvoicexml max-size="2000" (change)="UploadFile($event, item, 'invoiceXML')"/>
+                                <a class="link-missing cursor-pointer hover:underline mt-1" (click)="fileUploadInvoicexml.click()">
+                                    <i class="fas fa-upload"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment !== 0">
+                                <a class="link cursor-pointer hover:underline mt-1" (click)="View(item.documents?.voucherOfPayment)">
+                                    <i class="fas fa-check mr-1 text-emerald-500"></i>Comprobante de pago
+                                </a>
+                                <a class="link cursor-pointer hover:underline mt-1" (click)="Download(item.documents?.voucherOfPayment)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment === 0">
+                                <span class="link-missing mt-1">
+                                    <i class="fas fa-times mr-1 text-red-500"></i><span>Comprobante de pago</span>
+                                </span>
+                                <input id="file-upload-voucher" name="file-upload-voucher" type="file" class="sr-only" accept="application/pdf" #fileUploadVoucher max-size="2000" (change)="UploadFile($event, item, 'voucherOfPayment')"/>
+                                <a class="link-missing cursor-pointer hover:underline mt-1" (click)="fileUploadVoucher.click()">
+                                    <i class="fas fa-upload"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <div class="flex flex-col">
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialPDF !== 0">
+                                <a class="link cursor-pointer hover:underline mt-2" (click)="View(item.documents?.partialPDF)">
+                                    <i class="fas fa-check mr-1 text-emerald-500"></i> Complemento1 (PDF)
+                                </a>
+                                <a class="link cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.partialPDF)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialPDF === 0">
+                                <span class="link-missing mt-1">
+                                    <i class="fas fa-times mr-1 text-red-500"></i><span>Complemento1 (PDF)</span>
+                                </span>
+                                <input id="file-upload-partialpdf" name="file-upload-partialpdf" type="file" class="sr-only" accept="application/pdf" #fileUploadPartialpdf max-size="2000" (change)="UploadFile($event, item, 'partialPDF')"/>
+                                <a class="link-missing cursor-pointer hover:underline mt-1" (click)="fileUploadPartialpdf.click()">
+                                    <i class="fas fa-upload"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML !== 0">
+                                <a class="link cursor-pointer hover:underline mt-2" (click)="View(item.documents?.partialXML)">
+                                    <i class="fas fa-check mr-1 text-emerald-500"></i> Complemento1 (XML)
+                                </a>
+                                <a class="link cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.partialXML)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML === 0">
+                                <span class="link-missing mt-1">
+                                    <i class="fas fa-times mr-1 text-red-500"></i><span>Complemento1 (XML)</span>
+                                </span>
+                                <input id="file-upload-partialxml" name="file-upload-partialxml" type="file" class="sr-only" accept=".xml" #fileUploadPartialxml max-size="2000" (change)="UploadFile($event, item, 'partialXML')"/>
+                                <a class="link-missing cursor-pointer hover:underline mt-1" (click)="fileUploadPartialxml.click()">
+                                    <i class="fas fa-upload"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-center" *ngIf="item.paymentMethod !== 'PPD'">
+                                <span class="mt-1">
+                                    <span>N/A</span>
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="w-full mt-10 flex items-center justify-center" *ngIf="total > 0">
+    <pagination-controls
+        (pageChange)="GetData($event)"
+        previousLabel="Anterior"
+        nextLabel="Siguiente">
+    </pagination-controls>
+</div>

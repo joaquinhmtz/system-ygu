@@ -2,6 +2,7 @@ const path = require('path');
 const rootPath = path.normalize(__dirname + '/../../');
 let ArchiveLib = require("./archives.lib");
 let MovementLib = require("./../movements/movements.lib");
+let GlobalUtils = require("./../utils/global.utils");
 
 const GetArchivesCount = async (req, res, next) => {
     try {
@@ -25,6 +26,29 @@ const GetArchivesList = async (req, res, next) => {
 
     } catch (e) {
         console.log("Error - GetArchivesList: ", e);
+        next(e);
+    }
+}
+
+const UploadMissingFile = async (req, res, next) => {
+    try {
+        let data = req.body;
+        data = JSON.parse(data.movement);
+        let file = req.file;
+        let set = {};
+
+        if (data.document === "invoicePDF") set = { "documents.invoicePDF" : `uploads/documents/${file.filename}` };
+        if (data.document === "invoiceXML") set = { "documents.invoiceXML" : `uploads/documents/${file.filename}` };
+        if (data.document === "voucherOfPayment") set = { "documents.voucherOfPayment" : `uploads/documents/${file.filename}` };
+        if (data.document === "partialPDF") set = { "documents.partialPDF" : `uploads/documents/${file.filename}` };
+        if (data.document === "partialXML") set = { "documents.partialXML" : `uploads/documents/${file.filename}` };
+
+        let upd = await MovementLib.UpdateMovement({ _id: GlobalUtils.CreateObjectId(data._id) },{ $set: set });
+
+        res.status(200).send({ success: true, data: "" });
+
+    } catch (e) {
+        console.log("Error - UploadMissingFile: ", e);
         next(e);
     }
 }
@@ -56,4 +80,5 @@ const GenerateZip = async (req, res, next) => {
 
 module.exports.GetArchivesCount = GetArchivesCount;
 module.exports.GetArchivesList = GetArchivesList;
+module.exports.UploadMissingFile = UploadMissingFile;
 module.exports.GenerateZip = GenerateZip;

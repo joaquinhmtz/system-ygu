@@ -78,7 +78,20 @@ const GetMovement = async (data) => {
     }
 }
 
+const UpdateMovement = async (params, update) => {
+    try {
+        let movement = await MovementScheme.updateOne(params, update);
+
+        return movement;
+        
+    } catch (e) {
+        console.log("Err GetMovement: ", e);
+        throw new Error(e);
+    }
+}
+
 module.exports.ReadFile = ReadFile;
 module.exports.DeleteFile = DeleteFile;
 module.exports.SaveMovement = SaveMovement;
 module.exports.GetMovement = GetMovement;
+module.exports.UpdateMovement = UpdateMovement;
