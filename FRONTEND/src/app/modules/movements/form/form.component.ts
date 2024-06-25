@@ -23,7 +23,10 @@ export class FormComponent implements OnInit {
   userLog: any;
   catalogs: any = {
     billingTypes : [{ name: "INGRESO" }, { name: "EGRESO" }],
-    clientTypes : [{ name: "CLIENTE" }, { name: "PROVEEDOR" }, { name: "ESTADO DE CUENTA" }]
+    clientTypes : [{ name: "CLIENTE" }, { name: "PROVEEDOR" }, { name: "ESTADO DE CUENTA" }],
+    enterprises: [],
+    clients: [],
+    paymentMethods: [{ name: "PPD" }, { name: "PUE" }]
   };
   band: any = {
     typeRegister: "",
@@ -51,6 +54,20 @@ export class FormComponent implements OnInit {
   SaveMovement() {
     this.band.submit = true;
     if (!this.movementForm.valid) return;
+    let client = this.movementForm.controls["client"].value;
+    this.movementForm.controls["client"].setValue({
+      name: client.name,
+      rfc: client.rfc,
+      cfdi: client.cfdi,
+      type: this.movementForm.controls["client_type"].value
+    });
+    if (this.band.typeRegister === "manual") {
+      let date = new Date(this.movementForm.controls["invoice"].controls["invoiceDate"].value);
+      date.setHours(18);
+      date.setDate(date.getDate() + 1);
+      this.movementForm.controls["invoice"].controls["invoiceDate"].setValue(date);
+      console.log(this.movementForm.controls["invoice"].controls["invoiceDate"].value);
+    }
 
     this.swal.confirmContent("¿Desea registrar el movimiento?", this.BuildSwalHTML(), (result:any) => {
       if (result.value) {
@@ -71,6 +88,7 @@ export class FormComponent implements OnInit {
     this.band.typeRegister = event.type;
     this.band.hiddenForm = false;
     if (this.band.typeRegister === "xml") this.SetMovementForm(event);
+    else this.InitCatalogs();
   }
 
   SetMovementForm(data:any) {
@@ -79,9 +97,9 @@ export class FormComponent implements OnInit {
       client: {
         name: data.client.name,
         rfc: data.client.rfc,
-        cfdi: data.client.cfdi,
-        type: null
+        cfdi: data.client.cfdi
       },
+      client_type: null,
       paymentMethod: data.paymentMethod ? data.paymentMethod : "",
       total: data.total,
       invoice: {
@@ -176,22 +194,44 @@ export class FormComponent implements OnInit {
     return html;
   }
 
+  async InitCatalogs() {
+    await this.GetCatalogEnterprises();
+    await this.GetCatalogClients();
+  }
+
+  GetCatalogEnterprises() {
+    return new Promise<Boolean>((resolve, reject) => {
+      this.http.HTTP_GET("/api/v1/catalogs/enterprises")
+        .subscribe((res:any) => {
+          this.catalogs.enterprises = res;
+          resolve(true);
+        }, (err) => {
+          this.session.CheckError(err);
+        });
+    });
+  }
+
+  GetCatalogClients() {
+    return new Promise<Boolean>((resolve, reject) => {
+      this.http.HTTP_GET("/api/v1/catalogs/clients")
+        .subscribe((res:any) => {
+          this.catalogs.clients = res;
+          resolve(true);
+        }, (err) => {
+          this.session.CheckError(err);
+        });
+    });
+  }
+
   initForm() {
     this.movementForm = this.formBuilder.group({
-      enterprise: this.formBuilder.group({
-        name: new FormControl(undefined, Validators.required),
-        rfc: new FormControl(undefined, Validators.required),
-      }),
-      client: this.formBuilder.group({
-        name: new FormControl(undefined, Validators.required),
-        type: new FormControl(undefined, Validators.required),
-        rfc: new FormControl(undefined),
-        cfdi: new FormControl(undefined),
-      }),
+      enterprise: new FormControl(undefined, Validators.required),
+      client: new FormControl(undefined, Validators.required),
+      client_type: new FormControl(undefined, Validators.required),
       paymentMethod: new FormControl(undefined, Validators.required),
       total: new FormControl(0, Validators.required),
       invoice: this.formBuilder.group({
-        invoiceDate: new FormControl(undefined),
+        invoiceDate: new FormControl(undefined, Validators.required),
         invoiceFolio: new FormControl(undefined),
         methodOfPayment: new FormControl(undefined),
         typeInvoice: new FormControl(undefined, Validators.required),

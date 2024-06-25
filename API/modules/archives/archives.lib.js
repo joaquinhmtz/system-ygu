@@ -26,20 +26,21 @@ const GetList = async (data) => {
         let pipeline = [];
 
         pipeline.push({ $match: query });
-        pipeline.push({ $sort : { creationDate: -1 } });
+        pipeline.push({ $sort : { "folio": -1 } });
         pipeline.push({
             $project: {
                 enterprise: 1,
                 client: 1,
                 folio: 1,
                 invoice: 1,
-                "documents.invoiceXML": { $cond:{ if: { $eq : ["$documents.invoiceXML", ""], }, then: 0, else: "$documents.invoiceXML", } },
-                "documents.invoicePDF": { $cond:{ if: { $eq : ["$documents.invoicePDF", ""], }, then: 0, else: "$documents.invoicePDF", } },
-                "documents.voucherOfPayment": { $cond:{ if: { $eq : ["$documents.voucherOfPayment", ""], }, then: 0, else: "$documents.voucherOfPayment", } },
-                "documents.partialXML": { $cond:{ if: { $eq : ["$documents.partialXML", ""], }, then: 0, else: "$documents.partialXML", } },
-                "documents.partialPDF": { $cond:{ if: { $eq : ["$documents.partialPDF", ""], }, then: 0, else: "$documents.partialPDF", } },
+                "documents.invoiceXML": { $cond:{ if: {  $or: [ { $eq : ["$documents.invoiceXML", ""] }, { $eq : ["$documents.invoiceXML", null] } ], }, then: 0, else: "$documents.invoiceXML", } },
+                "documents.invoicePDF": { $cond:{ if: {  $or: [ { $eq : ["$documents.invoicePDF", ""] }, { $eq : ["$documents.invoicePDF", null] } ], }, then: 0, else: "$documents.invoicePDF", } },
+                "documents.voucherOfPayment": { $cond:{ if: {  $or: [ { $eq : ["$documents.voucherOfPayment", ""] }, { $eq : ["$documents.voucherOfPayment", null] } ], }, then: 0, else: "$documents.voucherOfPayment", } },
+                "documents.partialXML": { $cond:{ if: {  $or: [ { $eq : ["$documents.partialXML", ""] }, { $eq : ["$documents.partialXML", null] } ], }, then: 0, else: "$documents.partialXML", } },
+                "documents.partialPDF": { $cond:{ if: {  $or: [ { $eq : ["$documents.partialPDF", ""] }, { $eq : ["$documents.partialPDF", null] } ], }, then: 0, else: "$documents.partialPDF", } },
                 total: 1,
-                paymentMethod: 1
+                paymentMethod: 1,
+                creationDate: 1
             }
         });
         pipeline.push({

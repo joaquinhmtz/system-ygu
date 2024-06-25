@@ -37,8 +37,6 @@ const GetQuery = (data) => {
         query["total"] = { $lte: data.total };
     }
 
-    console.log(query)
-
     return query;
 }
 

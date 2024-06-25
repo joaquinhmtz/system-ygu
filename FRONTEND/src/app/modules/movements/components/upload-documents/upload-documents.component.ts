@@ -13,7 +13,6 @@ export class UploadDocumentsComponent implements OnInit {
   @Input() paymentMethod:any = String;
   @Input('changePaymentMethod') changePaymentMethod:any = Subject;
   
-  documentsRequiredBackup = [];
   documentsRequired: any = [{
     type: "Factura (XML)",
     controlName: "invoiceXML",
@@ -40,30 +39,11 @@ export class UploadDocumentsComponent implements OnInit {
     file: undefined,
     fileName: undefined,
     accept: "application/pdf"
-  },
-  {
-    type: "Complemento1 (XML)",
-    controlName: "partialXML",
-    size: undefined,
-    realSize: undefined,
-    file: undefined,
-    fileName: undefined,
-    accept: ".xml"
-  },
-  {
-    type: "Complemento1 (PDF)",
-    controlName: "partialPDF",
-    size: undefined,
-    realSize: undefined,
-    file: undefined,
-    fileName: undefined,
-    accept: "application/pdf"
   }];
 
   constructor(){}
 
   ngOnInit(): void {
-    this.documentsRequiredBackup = this.documentsRequired;
     this.InitRequiredDocuments();
     this.changePaymentMethod.subscribe((e:any) => {
       this.paymentMethod = e;
@@ -73,11 +53,31 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   InitRequiredDocuments() {
-    this.documentsRequired = this.documentsRequiredBackup;
-
     if (this.paymentMethod !== null || this.paymentMethod !== undefined || this.paymentMethod !== "") {
       if (this.paymentMethod === "PUE") {
-        this.documentsRequired.splice(3, 2);
+        for (let i = 0; i < this.documentsRequired.length; i++) {
+          if (this.documentsRequired[i].controlName === "partialXML") this.documentsRequired.splice(i, 1);
+          if (this.documentsRequired[i].controlName === "partialXML") this.documentsRequired.splice(i, 1);
+        }
+      } else if (this.paymentMethod === "PPD") {
+        this.documentsRequired.push({
+          type: "Complemento1 (XML)",
+          controlName: "partialXML",
+          size: undefined,
+          realSize: undefined,
+          file: undefined,
+          fileName: undefined,
+          accept: ".xml"
+        },
+        {
+          type: "Complemento1 (PDF)",
+          controlName: "partialXML",
+          size: undefined,
+          realSize: undefined,
+          file: undefined,
+          fileName: undefined,
+          accept: "application/pdf"
+        });
       }
     }
   }

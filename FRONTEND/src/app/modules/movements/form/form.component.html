@@ -13,8 +13,55 @@
             [setXmlData]="movementForm.value">
             </app-pimp-xml-data>
 
-            <div class="flex flex-wrap" formGroupName="client">
+            <div class="flex flex-wrap mt-5" *ngIf="band.typeRegister === 'manual'">
                 <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Empresa
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.enterprises"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        name="fEnterprise"
+                        placeholder="Selecciona una empresa"
+                        notFoundText="No se encontraron empresas."
+                        formControlName="enterprise"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+
+                    <div *ngIf="movementForm.controls['enterprise'].invalid && (movementForm.controls['enterprise'].dirty || movementForm.controls['enterprise'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['enterprise'].errors?.required">La empresa es requerida</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap">
+                <div class="w-full lg:w-6/12 pr-4 mb-2" *ngIf="band.typeRegister === 'manual'">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Cliente
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.clients"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        name="fclient"
+                        placeholder="Selecciona un cliente"
+                        notFoundText="No se encontraron clientes."
+                        formControlName="client"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+
+                    <div *ngIf="movementForm.controls['client'].invalid && (movementForm.controls['client'].dirty || movementForm.controls['client'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['client'].errors?.required">El cliente es requerido</span>
+                    </div>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2" [ngClass]="{'pr-4': band.typeRegister === 'xml'}">
                     <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
                         Tipo de cliente
                     </h5>
@@ -27,20 +74,32 @@
                         name="fclientType"
                         placeholder="Selecciona un tipo de cliente"
                         notFoundText="No se encontraron tipos de cliente."
-                        formControlName="type"
+                        formControlName="client_type"
                         class="border-0 bg-white rounded shadow mt-1"
                         autocomplete="false"
                             >
                     </ng-select>
 
-                    <div *ngIf="movementForm.controls['client'].controls['type'].invalid && (movementForm.controls['client'].controls['type'].dirty || movementForm.controls['client'].controls['type'].touched) || band.submit">
-                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['client'].controls['type'].errors?.required">El tipo de cliente es requerido</span>
+                    <div *ngIf="movementForm.controls['client_type'].invalid && (movementForm.controls['client_type'].dirty || movementForm.controls['client_type'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['client_type'].errors?.required">El tipo de cliente es requerido</span>
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-wrap" formGroupName="invoice">
-                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                <div class="w-full lg:w-6/12 pr-4 mb-2" *ngIf="band.typeRegister === 'manual'">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Fecha de movimiento
+                    </h5>
+                    <input type="date"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="invoiceDate" placeholder="Ej. (ISR, IVA, Banco, etc)"  />
+
+                    <div *ngIf="movementForm.controls['invoice'].controls['invoiceDate'].invalid && (movementForm.controls['invoice'].controls['invoiceDate'].dirty || movementForm.controls['invoice'].controls['invoiceDate'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['invoice'].controls['invoiceDate'].errors?.required">La fecha de movimiento es requerida </span>
+                    </div>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2" [ngClass]="{'pr-4': band.typeRegister === 'xml'}">
                     <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
                         Tipo de facturación
                     </h5>
@@ -64,7 +123,7 @@
                         <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['invoice'].controls['typeInvoice'].errors?.required">El tipo de facturación es requerido</span>
                     </div>
                 </div>
-                <div class="w-full lg:w-6/12 mb-2">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
                     <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
                         Movimiento
                     </h5>
@@ -74,6 +133,48 @@
 
                     <div *ngIf="movementForm.controls['invoice'].controls['nameMovement'].invalid && (movementForm.controls['invoice'].controls['nameMovement'].dirty || movementForm.controls['invoice'].controls['nameMovement'].touched) || band.submit">
                         <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['invoice'].controls['nameMovement'].errors?.required">El movimiento es requerido</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap" *ngIf="band.typeRegister === 'manual'">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Tipo de método de pago
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.paymentMethods"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fbillingType"
+                        placeholder="Selecciona un tipo de métodos de pago"
+                        notFoundText="No se encontraron tipos de métodos de pago."
+                        formControlName="paymentMethod"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                        (change)="SendPaymentMethod()"
+                            >
+                    </ng-select>
+
+                    <div *ngIf="movementForm.controls['paymentMethod'].invalid && (movementForm.controls['paymentMethod'].dirty || movementForm.controls['paymentMethod'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['paymentMethod'].errors?.required">El tipo de método de pago es requerido</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap" *ngIf="band.typeRegister === 'manual'">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Total
+                    </h5>
+                    <input type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="total" placeholder="Ej. $100.00"  />
+
+                    <div *ngIf="movementForm.controls['total'].invalid && (movementForm.controls['total'].dirty || movementForm.controls['total'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['total'].errors?.required">El total es requerido</span>
                     </div>
                 </div>
             </div>
