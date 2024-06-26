@@ -3,6 +3,7 @@ const rootPath = path.normalize(__dirname + '/../../');
 let ArchiveLib = require("./archives.lib");
 let MovementLib = require("./../movements/movements.lib");
 let GlobalUtils = require("./../utils/global.utils");
+let ReportArchive = require("./../utils/reports/report-archive.report");
 
 const GetArchivesCount = async (req, res, next) => {
     try {
@@ -78,7 +79,22 @@ const GenerateZip = async (req, res, next) => {
     }
 }
 
+const GenerateReport = async (req, res, next) => {
+    try {
+        let data = req.body;
+        let archives = await ArchiveLib.GetList(data);
+        let report = await ReportArchive.GenerateReportArchive(archives);
+
+        res.status(200).send({ success: true, data: report });
+
+    } catch (e) {
+        console.log("Error - GetArchivesList: ", e);
+        next(e);
+    }
+}
+
 module.exports.GetArchivesCount = GetArchivesCount;
 module.exports.GetArchivesList = GetArchivesList;
 module.exports.UploadMissingFile = UploadMissingFile;
 module.exports.GenerateZip = GenerateZip;
+module.exports.GenerateReport = GenerateReport;

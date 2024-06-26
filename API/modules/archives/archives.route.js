@@ -21,10 +21,14 @@ module.exports = (app, router) => {
     /*** Documents API ***/
     router.post("/api/v1/archive/zip", [middlewareToken], ArchiveCtrl.GenerateZip);
     router.get("/api/v1/archive/download-zip/:file", (req, res) => {
-        console.log("req.params", req.params);
-        console.log("req.query", req.query);
         let zipFile = req.params.file;
         const file = path.join((__dirname + '/../../public'), `${zipFile}`);
         res.download(file);
     });
+    router.get("/api/v1/archive/download/:file", (req, res) => {
+        let excelFile = req.params.file;
+        const file = path.join((__dirname + '/../../public/static/reports'), `${excelFile}`);
+        res.download(file);
+    });
+    router.post("/api/v1/archive/report", [middlewareToken], ArchiveCtrl.GenerateReport);
 }

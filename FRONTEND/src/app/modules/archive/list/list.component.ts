@@ -73,6 +73,20 @@ export class ListComponent implements OnInit {
     });
   }
 
+  GenerateExcelReport() {
+    this.swal.loading("Generando reporte", "Espere un momento...");
+    this.http.HTTP_POST("/api/v1/archive/report", this.params)
+      .subscribe((res:any) => {
+        this.swal.close();
+        let file = res.data.split("static/reports/");
+        setTimeout(() => {
+          this.DownloadExcel(file[1], res.data);
+        }, 300);
+      }, (err) => {
+        this.session.CheckError(err);
+      });
+  }
+
   SetDataFilters(e:any) {
     this.params.pagination.page = 1;
     this.params.filters = e;
@@ -129,6 +143,25 @@ export class ListComponent implements OnInit {
         URL.revokeObjectURL(objectUrl);
         document.body.removeChild(a);
         this.DeleteFile(url);
+      }, (err) => {
+        this.session.CheckError(err);
+      });
+  }
+
+  DownloadExcel(url:string, fullpath:string) {
+    let data = environment.server + '/' + url;
+
+    this.http.HTTP_DOWNLOAD_EXCEL(environment.server, url)
+      .subscribe((blob:any) => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        document.body.appendChild(a);
+        a.download = data;
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+        document.body.removeChild(a);
+        this.DeleteFile(fullpath);
       }, (err) => {
         this.session.CheckError(err);
       });

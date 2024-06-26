@@ -44,11 +44,13 @@ export class HttpService {
     );
 	}
 
-  // downloadfile(filePath: string){
-  //   return this.http
-  //       .get( URL_API_REST + 'downloadMaj?filePath='+ filePath)
-  //       .map(res => new Blob([res], {type: 'application/zip'}))
-//}
+  HTTP_DOWNLOAD_EXCEL(server: string, url:string) {
+		return this.http.get(`${server}/api/v1/archive/download/${url}`, { responseType: 'blob' }).pipe(
+      map((res: Blob) => {
+        return res;
+      })
+    );
+	}
 
   private handleError(error: HttpErrorResponse){
 		return throwError(error.error);
