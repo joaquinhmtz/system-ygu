@@ -34,6 +34,23 @@ export class SessionService {
     sessionStorage.clear();
   }
 
+  GetPermissions(moduleId:number) {
+    let user:any = this.GetUser();
+    user = JSON.parse(user);
+    let permissions = user.profile?.permissions ? user.profile?.permissions: [];
+    let permission: any = {};
+
+    for (let i = 0; i < permissions.length; i++) {
+      if(permissions[i].moduleId == moduleId){
+        for (let j = 0; j < permissions[i].privileges.length; j++) {
+          permission[permissions[i].privileges[j].method] = permissions[i].privileges[j].active;
+        }
+      }
+    }
+    
+    return permission;
+  }
+
   CheckError (error:any) {
     if (error.status === 401 && error.message === 'Tu sesión ha expirado.' || error.status === 401 && error.message === 'Token no válido.') {
       setTimeout(() => {

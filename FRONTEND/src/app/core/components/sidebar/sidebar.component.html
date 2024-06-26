@@ -94,16 +94,16 @@
 
             </ul>
              <!-- Divider -->
-             <hr class="my-4 hidden md:block" />
+             <hr class="my-4 hidden md:block" *ngIf="permissions.get" />
              <!-- Heading -->
-             <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+             <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline" *ngIf="permissions.get">
                  Usuarios
              </h6>
              <!-- Navigation -->
  
-             <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+             <ul class="md:flex-col md:min-w-full flex flex-col list-none" *ngIf="permissions.get">
  
-                 <li class="items-center">
+                 <li class="items-center" *ngIf="permissions.get">
                      <a [routerLink]="['/app/users']" class="text-xs uppercase py-3 font-bold block"
                          routerLinkActive #adminUsers="routerLinkActive" [ngClass]="
                          adminUsers.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' "
@@ -112,7 +112,7 @@
                          Listado
                      </a>
                  </li>
-                 <li class="items-center">
+                 <li class="items-center" *ngIf="permissions.post">
                      <a [routerLink]="['/app/users/new']" class="text-xs uppercase py-3 font-bold block"
                          routerLinkActive #adminUser="routerLinkActive" [ngClass]="
                          adminUser.isActive ? 'text-lightBlue-600 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' "

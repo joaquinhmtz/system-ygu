@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
       .subscribe((res:any) => {
         this.swal.close();
         this.swal.toastSuccess(`Bienvenido ${res?.user?.name}`);
+        res.user["profile"] = res.profile;
         this.session.SetSessionStorage(res.user, res.token);
         this.router.navigate(["/app/main"]);
       }, (err) => {
