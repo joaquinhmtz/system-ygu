@@ -77,7 +77,7 @@ export class ListComponent implements OnInit {
     this.params.pagination.page = 1;
     this.params.filters = e;
     this.GetData();
-   }
+  }
 
   View(url:string) {
     let path = environment.server + '/' + url;

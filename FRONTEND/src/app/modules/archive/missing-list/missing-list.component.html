@@ -1,3 +1,5 @@
+<app-filters-missing *ngIf="band.showFilters" (sendDataFilters)="SetDataFilters($event)"></app-filters-missing>
+
 <div class="flex items-center justify-between mt-5">
     <h3 class="font-bold mt-5 mb-2">
         Archivos faltantes <span *ngIf="!band.counting">({{ total | number:'1.0-0' }})</span>

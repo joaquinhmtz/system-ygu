@@ -71,6 +71,12 @@ export class MissingListComponent implements OnInit {
     });
   }
 
+  SetDataFilters(e:any) {
+    this.params.pagination.page = 1;
+    this.params.filters = e;
+    this.GetData();
+  }
+
   UploadFile(event:any, data:any, document:string) {
     const file:File = event.target.files[0];
 
@@ -87,15 +93,6 @@ export class MissingListComponent implements OnInit {
         }, (err) => {
           this.session.CheckError(err);
         });
-      // this.documentsRequired.forEach((item:any, index:number) => {
-      //   if (item.type === typeFile) {
-      //     item.fileName = file.name;
-      //     item.size = file.size;
-      //     item.realSize = this.GetFileSize(file.size);
-      //     item.file = file;
-      //     this.sendFile(this.documentsRequired[index]);
-      //   }
-      // });
     }
   }
 

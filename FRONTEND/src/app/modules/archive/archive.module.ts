@@ -8,13 +8,15 @@ import { MissingListComponent } from './missing-list/missing-list.component';
 import { ListComponent } from './list/list.component';
 import { ArchiveRoutingModule } from './archive-routing.module';
 import { FiltersComponent } from './components/filters/filters.component';
+import { FiltersMissingComponent } from './components/filters-missing/filters-missing.component';
 
 
 @NgModule({
   declarations: [
     MissingListComponent,
     ListComponent,
-    FiltersComponent
+    FiltersComponent,
+    FiltersMissingComponent
   ],
   imports: [
     CommonModule,

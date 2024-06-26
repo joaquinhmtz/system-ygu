@@ -37,6 +37,14 @@ const GetQuery = (data) => {
         query["total"] = { $lte: data.total };
     }
 
+    if (data.document) {
+        if (data.document === "FACTURA (PDF)") query["$or"] = [{ "documents.invoicePDF" : { $eq: null } }, { "documents.invoicePDF" : { $eq: "" } }];
+        if (data.document === "FACTURA (XML)") query["$or"] = [{ "documents.invoiceXML" : { $eq: null } }, { "documents.invoiceXML" : { $eq: "" } }];
+        if (data.document === "COMPROBANTE DE PAGO") query["$or"] = [{ "documents.voucherOfPayment" : { $eq: null } }, { "documents.voucherOfPayment" : { $eq: "" } }];
+        if (data.document === "COMPLEMENTO1 (PDF)") query["$or"] = [{ "documents.partialPDF" : { $eq: null } }, { "documents.partialPDF" : { $eq: "" } }];
+        if (data.document === "COMPLEMENTO1 (XML)") query["$or"] = [{ "documents.partialXML" : { $eq: null } }, { "documents.partialXML" : { $eq: "" } }];
+    }
+
     return query;
 }
 
