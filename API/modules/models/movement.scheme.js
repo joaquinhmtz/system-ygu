@@ -16,6 +16,7 @@ let MovementScheme = new Scheme({
         rfc: { type: String, trim: true, uppercase: true },
     },
     paymentMethod: { type: String, trim: true, uppercase: true },
+    typeReceipt: { type: String, trim: true, uppercase: true },
     total: { type: Number, default: 0 },
     invoice: {
         invoiceDate: { type: Date },

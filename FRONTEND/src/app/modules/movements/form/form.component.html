@@ -116,6 +116,29 @@
             <div class="flex flex-wrap" *ngIf="band.typeRegister === 'manual'">
                 <div class="w-full lg:w-6/12 pr-4 mb-2">
                     <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
+                        Tipo de comprobante
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.typeReceipts"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fbillingType"
+                        placeholder="Selecciona un tipo de comprobante"
+                        notFoundText="No se encontraron tipos de comprobantes."
+                        formControlName="typeReceipt"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+
+                    <div *ngIf="movementForm.controls['typeReceipt'].invalid && (movementForm.controls['typeReceipt'].dirty || movementForm.controls['typeReceipt'].touched) || band.submit">
+                        <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['typeReceipt'].errors?.required">El tipo de comprobante es requerido</span>
+                    </div>
+                </div>
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
                         Tipo de método de pago
                     </h5>
                     <ng-select

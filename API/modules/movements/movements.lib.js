@@ -27,6 +27,7 @@ const ReadFile = async (data) => {
                     invoiceDate: result["$"].Fecha,
                     paymentMethod: result["$"].MetodoPago,
                     methodOfPayment: result["$"].FormaPago,
+                    typeReceipt: (result["$"].TipoDeComprobante === "I" ? "FACTURA" : "COMPLEMENTO")
                 };
             }
         });

@@ -26,7 +26,8 @@ export class FormComponent implements OnInit {
     clientTypes : [{ name: "CLIENTE" }, { name: "PROVEEDOR" }, { name: "ESTADO DE CUENTA" }],
     enterprises: [],
     clients: [],
-    paymentMethods: [{ name: "PPD" }, { name: "PUE" }]
+    paymentMethods: [{ name: "PPD" }, { name: "PUE" }],
+    typeReceipts: [{ name: "FACTURA" }, { name: "COMPLEMENTO" }]
   };
   band: any = {
     typeRegister: "",
@@ -103,6 +104,7 @@ export class FormComponent implements OnInit {
         cfdi: data.client.cfdi
       },
       paymentMethod: data.paymentMethod ? data.paymentMethod : "",
+      typeReceipt: data.typeReceipt ? data.typeReceipt : "",
       total: data.total,
       invoice: {
         invoiceDate: data.invoiceDate ? data.invoiceDate : undefined,
@@ -230,6 +232,7 @@ export class FormComponent implements OnInit {
       enterprise: new FormControl(undefined, Validators.required),
       client: new FormControl(undefined, Validators.required),
       paymentMethod: new FormControl(undefined, Validators.required),
+      typeReceipt: new FormControl(undefined, Validators.required),
       total: new FormControl(0, Validators.required),
       invoice: this.formBuilder.group({
         invoiceDate: new FormControl(undefined, Validators.required),
