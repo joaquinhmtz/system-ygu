@@ -13,7 +13,8 @@ const session = require('express-session');
 const dotenv = require('dotenv').config();
 let errorHandler = require("./middlewares/errorHandler.middleware");
 
-let uri = "mongodb://127.0.0.1:27017/ygu";
+//let uri = "mongodb://127.0.0.1:27017/ygu";
+let uri = `mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPASSWORD}`+ `@cluster0.1rhhhez.mongodb.net/${process.env.MONGODB}?retryWrites=true&w=majority&appName=${process.env.Cluster0}`
 
 const connectDb = async () => {
     try {
