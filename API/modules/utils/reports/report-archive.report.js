@@ -140,6 +140,7 @@ const GenerateReportArchive = async (data)  => {
         ws.column(10).setWidth(60);  //Comprobante de pago
         ws.column(11).setWidth(60);  //Complemento1(pdf)
         ws.column(12).setWidth(60);  //Comeplemento1(xml)
+        //ws.column(13).setWidth(60);  //Archivos Extras
         //Config Rows
 		ws.row(5).setHeight(20);
 
@@ -161,6 +162,7 @@ const GenerateReportArchive = async (data)  => {
         ws.cell(5, 10).string("Comprobante de pago").style(SubTitle);
         ws.cell(5, 11).string("Complemento1 (PDF)").style(SubTitle);
         ws.cell(5, 12).string("Complemento1 (XML)").style(SubTitle);
+        // ws.cell(5, 13).string("Archivos extras").style(SubTitle);
 
         let init = 6;
         data.forEach(function(elem) {
@@ -198,6 +200,17 @@ const GenerateReportArchive = async (data)  => {
                 partialXML = "N/A";
             }
             ws.cell(init, column++).link(partialXML).style(linkStyle);
+
+            // if (elem.extraDocuments && elem.extraDocuments.length >= 1) {
+            //     let strExtraDoc = "";
+            //     for(let i = 0; i < elem.extraDocuments.length; i++) {
+            //         strExtraDoc += `${elem.extraDocuments[i]}`
+            //         ws.cell(init, column++).formula(
+            //             ws.cell(init, column++).link(partialXML).style(linkStyle)
+            //         ).style(linkStyle);
+            //     }
+                
+            // }
 
             init++;
         });

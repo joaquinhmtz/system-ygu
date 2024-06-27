@@ -34,7 +34,7 @@ const GetQuery = (data) => {
     }
 
     if (data.total !== 0 && data.total > 0) {
-        query["total"] = { $lte: data.total };
+        query["total"] = { $lte: parseInt(data.total) };
     }
 
     if (data.document) {

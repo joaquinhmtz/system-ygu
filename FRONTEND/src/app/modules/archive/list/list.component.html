@@ -37,6 +37,9 @@
                     <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                         Archivos
                     </th>
+                    <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                        Usuario
+                    </th>
                     <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold bg-blueGray-50 text-blueGray-500 border-blueGray-100 text-center">
                         Acciones
                     </th>
@@ -136,7 +139,18 @@
                                 <span>Complemento1 (XML)</span>
                                 <i class="fas fa-times-circle"></i>
                             </div>
+                            <div class="flex w-full" *ngIf="item.extraDocuments && item.extraDocuments.length >= 1">
+                                <div class="flex justify-between w-full" *ngFor="let extra of item.extraDocuments">
+                                    <a class="cursor-pointer hover:underline mt-2" (click)="View(extra)">Archivo (S/Clasificación)</a>
+                                    <a class="cursor-pointer hover:underline mt-2" (click)="Download(extra)">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+                    </td>
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                        <span>{{ item.user?.fullname || '-' }}</span>
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
                         <div class="flex justify-center">

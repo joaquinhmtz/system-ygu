@@ -40,7 +40,9 @@ const GetList = async (data) => {
                 "documents.partialPDF": { $cond:{ if: {  $or: [ { $eq : ["$documents.partialPDF", ""] }, { $eq : ["$documents.partialPDF", null] } ], }, then: 0, else: "$documents.partialPDF", } },
                 total: 1,
                 paymentMethod: 1,
-                creationDate: 1
+                creationDate: 1,
+                user: 1,
+                extraDocuments: 1
             }
         });
         pipeline.push({
