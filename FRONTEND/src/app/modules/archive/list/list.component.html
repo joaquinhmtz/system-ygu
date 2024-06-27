@@ -66,15 +66,15 @@
                             <div>
                                 <b>{{ item.client.name || '-' }}</b>
                             </div>
-                            <div>
-                                {{ item.client.type || '-' }}
-                            </div>
                         </div>
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <div class="flex flex-col">
                             <div>
                                 <b>{{ item.folio || '-' }}</b>
+                            </div>
+                            <div>
+                                <b>{{ item.paymentMethod || '-' }}</b>
                             </div>
                             <div>
                                 {{ (item.invoice.invoiceDate | date: 'dd/MM/yyyy') || '-' }}

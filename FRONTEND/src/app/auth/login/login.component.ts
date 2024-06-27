@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.http.HTTP_POST("/v1/login", this.loginForm.value)
       .subscribe((res:any) => {
         this.swal.close();
-        this.swal.toastSuccess(`Bienvenido ${res?.user?.name}`);
+        this.swal.toastSuccess(`Bienvenido ${res?.user?.username}`);
         res.user["profile"] = res.profile;
         this.session.SetSessionStorage(res.user, res.token);
         this.router.navigate(["/app/main"]);

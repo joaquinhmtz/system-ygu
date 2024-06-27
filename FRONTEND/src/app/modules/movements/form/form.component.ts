@@ -22,7 +22,7 @@ export class FormComponent implements OnInit {
   movementForm:any = FormGroup;
   userLog: any;
   catalogs: any = {
-    billingTypes : [{ name: "INGRESO" }, { name: "EGRESO" }],
+    billingTypes : [{ name: "CLIENTE (INGRESO)" }, { name: "PROVEEDOR (EGRESO)" }, { name: "ESTADO DE CUENTA" },  { name: "IMPUESTOS" }],
     clientTypes : [{ name: "CLIENTE" }, { name: "PROVEEDOR" }, { name: "ESTADO DE CUENTA" }],
     enterprises: [],
     clients: [],
@@ -46,6 +46,11 @@ export class FormComponent implements OnInit {
     this.initForm();
     this.userLog = this.session.GetUser();
     this.userLog = JSON.parse(this.userLog);
+    this.movementForm.controls["user"].setValue({
+      _id: this.userLog._id,
+      fullname: this.userLog.fullname
+    });
+    console.log(this.movementForm)
     setTimeout(() => {
       this.ChooseType();
     }, 300);
@@ -58,15 +63,13 @@ export class FormComponent implements OnInit {
     this.movementForm.controls["client"].setValue({
       name: client.name,
       rfc: client.rfc,
-      cfdi: client.cfdi,
-      type: this.movementForm.controls["client_type"].value
+      cfdi: client.cfdi
     });
     if (this.band.typeRegister === "manual") {
       let date = new Date(this.movementForm.controls["invoice"].controls["invoiceDate"].value);
       date.setHours(18);
       date.setDate(date.getDate() + 1);
       this.movementForm.controls["invoice"].controls["invoiceDate"].setValue(date);
-      console.log(this.movementForm.controls["invoice"].controls["invoiceDate"].value);
     }
 
     this.swal.confirmContent("¿Desea registrar el movimiento?", this.BuildSwalHTML(), (result:any) => {
@@ -99,7 +102,6 @@ export class FormComponent implements OnInit {
         rfc: data.client.rfc,
         cfdi: data.client.cfdi
       },
-      client_type: null,
       paymentMethod: data.paymentMethod ? data.paymentMethod : "",
       total: data.total,
       invoice: {
@@ -227,7 +229,6 @@ export class FormComponent implements OnInit {
     this.movementForm = this.formBuilder.group({
       enterprise: new FormControl(undefined, Validators.required),
       client: new FormControl(undefined, Validators.required),
-      client_type: new FormControl(undefined, Validators.required),
       paymentMethod: new FormControl(undefined, Validators.required),
       total: new FormControl(0, Validators.required),
       invoice: this.formBuilder.group({
