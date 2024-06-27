@@ -39,8 +39,9 @@ app.use(function (req, res, next) {
 });
 app.use(cors());
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(session({
     secret: process.env.SECRET,
@@ -50,8 +51,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.set('showStackError', true);
 app.use('/', router);
 app.use(express.static(__dirname + '/public'));
+app.use(express["static"](__dirname + "/public/client"));
 app.use(errorHandler.errorHandler);
 
 app.listen(PORT, () => { 
