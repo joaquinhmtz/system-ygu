@@ -18,6 +18,8 @@ const errorHandler = (error, request, response, next) => {
         errorObj["message"] = "No se ha encontrado el directorio destino";
         errorObj["status"] = 500;
         errorObj["error"] = error.toString();
+    } else {
+        errorObj["status"] = 400;
     }
 
     console.log("error****", error);
