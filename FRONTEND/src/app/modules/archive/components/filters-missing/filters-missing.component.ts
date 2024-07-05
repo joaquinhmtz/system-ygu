@@ -12,8 +12,7 @@ export class FiltersMissingComponent {
   
   filtersForm: any = FormGroup;
   catalogs: any = {
-    billingTypes : [{ name: "INGRESO" }, { name: "EGRESO" }],
-    clientTypes : [{ name: "CLIENTE" }, { name: "PROVEEDOR" }, { name: "ESTADO DE CUENTA" }],
+    billingTypes : [{ name: "CLIENTE (INGRESO)" }, { name: "PROVEEDOR (EGRESO)" }, { name: "ESTADO DE CUENTA" },  { name: "IMPUESTOS" }],
     documentTyp : [{ name: "FACTURA (PDF)" }, { name: "FACTURA (XML)" }, { name: "COMPROBANTE DE PAGO" }, { name: "COMPLEMENTO1 (PDF)" }, { name: "COMPLEMENTO1 (XML)" }],
   };
 

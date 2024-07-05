@@ -71,34 +71,6 @@
                 <div class="w-full lg:w-4/12 px-4 mb-2">
                     <div class="relative w-full mb-3">
                         <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
-                            Tipo cliente
-                        </label>
-                        <div class="flex">
-                            <ng-select
-                                [items]="catalogs.clientTypes"
-                                [multiple]="false"
-                                [closeOnSelect]="true"
-                                bindLabel="name"
-                                bindValue="name" 
-                                name="fclientType"
-                                placeholder="Selecciona un tipo de cliente"
-                                notFoundText="No se encontraron tipos de cliente."
-                                formControlName="type"
-                                class="border-0 bg-white rounded shadow mt-1 w-full"
-                                autocomplete="false"
-                                (change)="SendFiltersInfo()"
-                                    >
-                            </ng-select>
-
-                            <button type="button" (click)="CleanFormcontrol('type')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
-                                <i class="fas fa-eraser" ></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="w-full lg:w-4/12 px-4 mb-2">
-                    <div class="relative w-full mb-3">
-                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                             Tipo de documento
                         </label>
                         <div class="flex">
