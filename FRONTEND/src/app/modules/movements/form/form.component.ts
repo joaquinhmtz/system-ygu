@@ -239,7 +239,7 @@ export class FormComponent implements OnInit {
         invoiceFolio: new FormControl(undefined),
         methodOfPayment: new FormControl(undefined),
         typeInvoice: new FormControl(undefined, Validators.required),
-        nameMovement: new FormControl(undefined, Validators.required)
+        nameMovement: new FormControl(undefined)
       }),
       documents: this.formBuilder.group({
         invoiceXML: new FormControl(undefined),

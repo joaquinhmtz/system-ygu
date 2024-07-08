@@ -83,6 +83,8 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   UploadFile(event:any, typeFile:string) {
+    console.log("event**", event);
+    console.log("typeFile**", typeFile);
     const file:File = event.target.files[0];
 
     if (file) {
