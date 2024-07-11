@@ -27,7 +27,8 @@ export class PimpXmlDataComponent implements OnInit {
     typeReceipt: undefined,
     total: 0,
     invoice: {
-      invoiceDate: undefined
+      invoiceDate: undefined,
+      invoiceFolio: undefined
     }
   };
   

@@ -78,4 +78,12 @@
             {{ (_setXmlData.invoice.invoiceDate | date: 'dd/MM/yyyy') || "-" }}
         </span>
     </div>
+    <div class="w-full lg:w-6/12 mb-2">
+        <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+            Folio factura
+        </h5>
+        <span class="font-semibold text-md text-blueGray-700">
+            {{ _setXmlData.invoice.invoiceFolio || '-' }}
+        </span>
+    </div>
 </div>
