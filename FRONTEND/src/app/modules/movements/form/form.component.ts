@@ -3,7 +3,6 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { Router } from '@angular/router';
 
 import { ModalTypeMovementComponent } from '../components/modal-type-movement/modal-type-movement.component';
-import { UploadDocumentsComponent } from '../components/upload-documents/upload-documents.component';
 import { SweetalertService } from 'src/app/shared/services/sweetalert.service';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { SessionService } from 'src/app/shared/services/session.service';
@@ -18,6 +17,7 @@ export class FormComponent implements OnInit {
 
   @ViewChild('modalChooseType', { static: true }) modalChooseType:any = ModalTypeMovementComponent;
   changePaymentMethod:Subject<any> = new Subject();
+  setUrlFile:Subject<any> = new Subject();
 
   movementForm:any = FormGroup;
   userLog: any;
@@ -132,6 +132,7 @@ export class FormComponent implements OnInit {
     let url = await this.UploadFile(event.file);
     if (event.type === "Archivo (S/Clasificación)") this.extraDocuments.push(this.formBuilder.group({path: new FormControl(url), index: new FormControl(event.index)}));
     else this.movementForm.controls["documents"].controls[event.controlName].setValue(url);
+    this.setUrlFile.next({ url: url, type: event.type });
   }
 
   UploadFile(file:File) {
@@ -170,6 +171,10 @@ export class FormComponent implements OnInit {
       }, (err) => {
         this.session.CheckError(err);
       });
+  }
+
+  SendUrlFile(event: any) {
+    console.log("aqui mero entra en send url", event);
   }
 
   BuildSwalHTML():string {

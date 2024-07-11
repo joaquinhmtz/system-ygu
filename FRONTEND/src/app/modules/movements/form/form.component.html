@@ -181,8 +181,10 @@
             <app-upload-documents
             [paymentMethod]="movementForm.value.paymentMethod"
             [changePaymentMethod]="changePaymentMethod"
+            [setUrlFile]="setUrlFile"
             (sendFiles)="SetFiles($event)"
-            (sendDeleteFile)="DeleteFile($event)">
+            (sendDeleteFile)="DeleteFile($event)"
+            (setUrlFile)="SendUrlFile($event)">
             </app-upload-documents>
 
             <hr class="mt-6 border-b-1 border-blueGray-300">

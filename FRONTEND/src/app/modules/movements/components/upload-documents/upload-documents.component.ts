@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-upload-documents',
   templateUrl: './upload-documents.component.html',
@@ -12,6 +14,7 @@ export class UploadDocumentsComponent implements OnInit {
   @Output() sendDeleteFile = new EventEmitter<Object>();
   @Input() paymentMethod:any = String;
   @Input('changePaymentMethod') changePaymentMethod:any = Subject;
+  @Input('setUrlFile') setUrlFile:any = Subject;
   
   documentsRequired: any = [{
     type: "Factura (XML)",
@@ -49,6 +52,13 @@ export class UploadDocumentsComponent implements OnInit {
       this.paymentMethod = e;
       this.InitRequiredDocuments();
     });
+    this.setUrlFile.subscribe((e:any) => {
+      this.documentsRequired.forEach((item:any, index:number) => {
+        if (item.type === e.type) {
+          item.path = e.url;
+        }
+      });
+    });
     
   }
 
@@ -83,8 +93,8 @@ export class UploadDocumentsComponent implements OnInit {
   }
 
   UploadFile(event:any, typeFile:string) {
-    console.log("event**", event);
-    console.log("typeFile**", typeFile);
+    //console.log("event**", event);
+    //console.log("typeFile**", typeFile);
     const file:File = event.target.files[0];
 
     if (file) {
@@ -146,5 +156,10 @@ export class UploadDocumentsComponent implements OnInit {
     let exactSize = (Math.round(size*100)/100)+' '+fSExt[i];
     
     return exactSize;
+  }
+
+  View(file:any) {
+    let path = environment.server + '/' + file.path;
+    window.open(path, '_blank');
   }
 }

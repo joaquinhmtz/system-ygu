@@ -33,7 +33,7 @@
                         {{ item.realSize || "-" }}
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {{ item.fileName || "-" }}
+                        <a class="cursor-pointer hover:underline mt-2" (click)="View(item)">{{ item.fileName || "-" }}</a>
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
                         <div class="flex justify-center">
