@@ -13,11 +13,11 @@ const ReadFile = async (data) => {
             else {
                 result = result["cfdi:Comprobante"];
                 invoice = {
-                    enterprise: {
+                    client: {
                         name: result['cfdi:Emisor'][0]["$"].Nombre,
                         rfc: result['cfdi:Emisor'][0]["$"].Rfc
                     },
-                    client: {
+                    enterprise: {
                         name: result['cfdi:Receptor'][0]["$"].Nombre,
                         rfc: result['cfdi:Receptor'][0]["$"].Rfc,
                         cfdi: result['cfdi:Receptor'][0]["$"].UsoCFDI,

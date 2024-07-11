@@ -97,11 +97,11 @@ export class FormComponent implements OnInit {
 
   SetMovementForm(data:any) {
     this.movementForm.setValue({
-      enterprise: data.enterprise,
-      client: {
-        name: data.client.name,
-        rfc: data.client.rfc,
-        cfdi: data.client.cfdi
+      client: data.client,
+      enterprise: {
+        name: data.enterprise.name,
+        rfc: data.enterprise.rfc,
+        cfdi: data.enterprise.cfdi
       },
       paymentMethod: data.paymentMethod ? data.paymentMethod : "",
       typeReceipt: data.typeReceipt ? data.typeReceipt : "",
