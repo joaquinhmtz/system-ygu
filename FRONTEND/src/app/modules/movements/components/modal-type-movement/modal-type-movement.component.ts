@@ -36,6 +36,7 @@ export class ModalTypeMovementComponent implements OnInit {
           this.swal.close();
           this.toggleModal();
           res.data["type"] = "xml";
+          res.data["invoiceXML"] = file;
           this.sendData(res.data);
         }, (err) => {
           this.session.CheckError(err);

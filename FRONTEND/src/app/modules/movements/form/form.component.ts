@@ -18,6 +18,7 @@ export class FormComponent implements OnInit {
   @ViewChild('modalChooseType', { static: true }) modalChooseType:any = ModalTypeMovementComponent;
   changePaymentMethod:Subject<any> = new Subject();
   setUrlFile:Subject<any> = new Subject();
+  setPartialXML:Subject<any> = new Subject();
 
   movementForm:any = FormGroup;
   userLog: any;
@@ -52,7 +53,6 @@ export class FormComponent implements OnInit {
       _id: this.userLog._id,
       fullname: this.userLog.fullname
     });
-    console.log(this.movementForm)
     setTimeout(() => {
       this.ChooseType();
     }, 300);
@@ -101,6 +101,14 @@ export class FormComponent implements OnInit {
     this.band.hiddenForm = false;
     if (this.band.typeRegister === "xml") this.SetMovementForm(event);
     else this.InitCatalogs();
+    if (event.invoiceXML && event.invoiceXML !== undefined) {
+      let invoiceXML = {
+        type: "Factura (XML)",
+        controlName: "invoiceXML",
+        file: event.invoiceXML
+      };
+      this.UploadPartialXML(invoiceXML);
+    }
   }
 
   SetMovementForm(data:any) {
@@ -160,6 +168,13 @@ export class FormComponent implements OnInit {
           this.session.CheckError(err);
         });
     })
+  }
+
+  async UploadPartialXML(data:any) {
+    let url = await this.UploadFile(data.file);
+    this.movementForm.controls["documents"].controls[data.controlName].setValue(url);
+    data["path"] = url;
+    this.setPartialXML.next(data);
   }
 
   DeleteFile(event:any) {

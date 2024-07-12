@@ -15,6 +15,7 @@ export class UploadDocumentsComponent implements OnInit {
   @Input() paymentMethod:any = String;
   @Input('changePaymentMethod') changePaymentMethod:any = Subject;
   @Input('setUrlFile') setUrlFile:any = Subject;
+  @Input('setPartialXML') setPartialXML:any = Subject;
   
   documentsRequired: any = [{
     type: "Factura (XML)",
@@ -51,6 +52,13 @@ export class UploadDocumentsComponent implements OnInit {
     this.changePaymentMethod.subscribe((e:any) => {
       this.paymentMethod = e;
       this.InitRequiredDocuments();
+    });
+    this.setPartialXML.subscribe((e:any) => {
+      this.documentsRequired[0].fileName = e.file.name;
+      this.documentsRequired[0].file = e.file;
+      this.documentsRequired[0].realSize = this.GetFileSize(e.file.size);
+      this.documentsRequired[0].size = e.file.size;
+      this.documentsRequired[0].path = e.path;
     });
     this.setUrlFile.subscribe((e:any) => {
       this.documentsRequired.forEach((item:any, index:number) => {
