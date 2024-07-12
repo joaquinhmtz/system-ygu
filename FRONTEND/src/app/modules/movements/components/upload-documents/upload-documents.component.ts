@@ -66,7 +66,7 @@ export class UploadDocumentsComponent implements OnInit {
     if (this.paymentMethod !== null || this.paymentMethod !== undefined || this.paymentMethod !== "") {
       if (this.paymentMethod === "PUE") {
         for (let i = 0; i < this.documentsRequired.length; i++) {
-          if (this.documentsRequired[i].controlName === "partialXML") this.documentsRequired.splice(i, 1);
+          if (this.documentsRequired[i].controlName === "partialPDF") this.documentsRequired.splice(i, 1);
           if (this.documentsRequired[i].controlName === "partialXML") this.documentsRequired.splice(i, 1);
         }
       } else if (this.paymentMethod === "PPD") {
@@ -81,7 +81,7 @@ export class UploadDocumentsComponent implements OnInit {
         },
         {
           type: "Complemento1 (PDF)",
-          controlName: "partialXML",
+          controlName: "partialPDF",
           size: undefined,
           realSize: undefined,
           file: undefined,

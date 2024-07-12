@@ -200,10 +200,10 @@ export class FormComponent implements OnInit {
     }
     if (this.movementForm.value.paymentMethod === "PPD") {
       if (this.returnDocumentValue("partialXML") === undefined || this.returnDocumentValue("partialXML") === null || this.returnDocumentValue("partialXML") === "") {
-        html += "<li> Falta archivo <b>Parcial1 (XML)</b>";
+        html += "<li> Falta archivo <b>Complemento1 (XML)</b>";
       }
       if (this.returnDocumentValue("partialPDF") === undefined || this.returnDocumentValue("partialPDF") === null || this.returnDocumentValue("partialPDF") === "") {
-        html += "<li> Falta archivo <b>Parcial1 (PDF)</b>";
+        html += "<li> Falta archivo <b>Complemento1 (PDF)</b>";
       }
     }
 
