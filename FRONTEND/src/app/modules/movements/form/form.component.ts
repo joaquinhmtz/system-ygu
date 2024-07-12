@@ -32,7 +32,8 @@ export class FormComponent implements OnInit {
   band: any = {
     typeRegister: "",
     hiddenForm: true,
-    submit: false
+    submit: false,
+    newClient: false
   };
 
   constructor(
@@ -61,16 +62,23 @@ export class FormComponent implements OnInit {
     this.band.submit = true;
     if (!this.movementForm.valid) return;
     let client = this.movementForm.controls["client"].value;
-    this.movementForm.controls["client"].setValue({
-      name: client.name,
-      rfc: client.rfc,
-      cfdi: client.cfdi
-    });
+    if (!this.band.newClient) {
+      this.movementForm.controls["client"].setValue({
+        name: client.name,
+        rfc: client.rfc,
+        cfdi: client.cfdi
+      });
+    } else {
+      this.movementForm.controls["client"].setValue({
+        name: client
+      });
+    }
     if (this.band.typeRegister === "manual") {
       let date = new Date(this.movementForm.controls["invoice"].controls["invoiceDate"].value);
       date.setHours(18);
       date.setDate(date.getDate() + 1);
       this.movementForm.controls["invoice"].controls["invoiceDate"].setValue(date);
+      if (this.band.newClient) this.movementForm.controls["newClient"].setValue(true);
     }
 
     this.swal.confirmContent("¿Desea registrar el movimiento?", this.BuildSwalHTML(), (result:any) => {
@@ -124,7 +132,8 @@ export class FormComponent implements OnInit {
         _id : this.userLog._id,
         fullname: this.userLog.fullname
       },
-      extraDocuments: []
+      extraDocuments: [],
+      newClient: false
     });
   }
 
@@ -257,7 +266,8 @@ export class FormComponent implements OnInit {
       user: this.formBuilder.group({
         _id : new FormControl(undefined),
         fullname: new FormControl(undefined)
-      })
+      }),
+      newClient: new FormControl(false)
     });
   }
 

@@ -50,7 +50,7 @@ const SaveMovement = async (req, res, next) => {
     try {
         let data = req.body;
         let existClient = await ClientLib.GetClient({ rfc: data.client.rfc });
-        if (existClient === null) {
+        if (existClient === null || data.newClient) {
             let client = await ClientLib.SaveClient(data.client);
             data.client["_id"] = client._id;
         }

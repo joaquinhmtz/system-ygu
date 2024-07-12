@@ -43,19 +43,29 @@
                     <h5 class="text-blueGray-400 uppercase font-bold text-xs required">
                         Cliente
                     </h5>
-                    <ng-select
-                        [items]="catalogs.clients"
-                        [multiple]="false"
-                        [closeOnSelect]="true"
-                        bindLabel="name"
-                        name="fclient"
-                        placeholder="Selecciona un cliente"
-                        notFoundText="No se encontraron clientes."
-                        formControlName="client"
-                        class="border-0 bg-white rounded shadow mt-1"
-                        autocomplete="false"
-                            >
-                    </ng-select>
+
+                    <div class="flex">
+                        <ng-select
+                            [items]="catalogs.clients"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            bindLabel="name"
+                            name="fclient"
+                            placeholder="Selecciona un cliente"
+                            notFoundText="No se encontraron clientes."
+                            formControlName="client"
+                            class="border-0 bg-white rounded shadow mt-1 w-full"
+                            autocomplete="false"
+                            *ngIf="!band.newClient"
+                                >
+                        </ng-select>
+                        <input #client type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="client" placeholder="Ej. Hanna Suárez"
+                        *ngIf="band.newClient"  />
+
+                        <button class="mt-1 text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150" type="button" *ngIf="!band.lock" (click)="band.newClient = !band.newClient"><i class="fas" [ngClass]="{ 'fa-times': band.newClient, 'fa-plus': !band.newClient }" ></i></button>
+                    </div>
 
                     <div *ngIf="movementForm.controls['client'].invalid && (movementForm.controls['client'].dirty || movementForm.controls['client'].touched) || band.submit">
                         <span class="text-sm text-red-500 mt-1" *ngIf="movementForm.controls['client'].errors?.required">El cliente es requerido</span>
