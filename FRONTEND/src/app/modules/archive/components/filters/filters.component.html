@@ -116,6 +116,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="w-full lg:w-4/12 px-4 mb-2">
+                    <div class="relative w-full mb-3">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
+                            Factura
+                        </label>
+                        <div class="flex">
+                            <input type="text"
+                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                            formControlName="invoiceFolio" placeholder="Ej. 27017" (keyup.enter)="SendFiltersInfo()" />
+
+                            <button type="button" (click)="CleanFormcontrol('invoiceFolio')" class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
+                                <i class="fas fa-eraser" ></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

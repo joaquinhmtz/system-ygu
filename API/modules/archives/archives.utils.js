@@ -45,6 +45,10 @@ const GetQuery = (data) => {
         if (data.document === "COMPLEMENTO1 (XML)") query["$or"] = [{ "documents.partialXML" : { $eq: null } }, { "documents.partialXML" : { $eq: "" } }];
     }
 
+    if (data.invoiceFolio) {
+        query["invoice.invoiceFolio"] = new RegExp(data.invoiceFolio, "i");
+    }
+
     return query;
 }
 

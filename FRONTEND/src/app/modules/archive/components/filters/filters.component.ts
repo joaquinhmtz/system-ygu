@@ -40,7 +40,8 @@ export class FiltersComponent implements OnInit {
       type: new FormControl(undefined),
       initDate: new FormControl(undefined),
       endDate: new FormControl(undefined),
-      total: new FormControl(0)
+      total: new FormControl(0),
+      invoiceFolio: new FormControl(undefined)
     })
   }
 }
