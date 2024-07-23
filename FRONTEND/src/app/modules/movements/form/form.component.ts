@@ -100,7 +100,10 @@ export class FormComponent implements OnInit {
     this.band.typeRegister = event.type;
     this.band.hiddenForm = false;
     if (this.band.typeRegister === "xml") this.SetMovementForm(event);
-    else this.InitCatalogs();
+    else {
+      //this.InitCatalogs()
+      this.router.navigateByUrl("/app/movements/new-manual");
+    }
     if (event.invoiceXML && event.invoiceXML !== undefined) {
       let invoiceXML = {
         type: "Factura (XML)",

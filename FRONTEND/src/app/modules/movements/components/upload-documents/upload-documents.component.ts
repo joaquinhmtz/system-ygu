@@ -17,7 +17,8 @@ export class UploadDocumentsComponent implements OnInit {
   @Input('setUrlFile') setUrlFile:any = Subject;
   @Input('setPartialXML') setPartialXML:any = Subject;
   
-  documentsRequired: any = [{
+  documentsRequired: any = [];
+  documentsOfPayment: any = [{
     type: "Factura (XML)",
     controlName: "invoiceXML",
     size: undefined,
@@ -44,14 +45,42 @@ export class UploadDocumentsComponent implements OnInit {
     fileName: undefined,
     accept: "application/pdf"
   }];
+  documentsOfstatements: any = [{
+    type: "Archivo (PDF)",
+    controlName: "documentStatementPDF",
+    size: undefined,
+    realSize: undefined,
+    file: undefined,
+    fileName: undefined,
+    accept: "application/pdf"
+  }];
+  documentsOfTax: any = [{
+    type: "Archivo de pago (PDF)",
+    controlName: "paymentDocumentPDF",
+    size: undefined,
+    realSize: undefined,
+    file: undefined,
+    fileName: undefined,
+    accept: "application/pdf"
+  }, {
+    type: "Archivo de cálculo (PDF)",
+    controlName: "calculingDocumentPDF",
+    size: undefined,
+    realSize: undefined,
+    file: undefined,
+    fileName: undefined,
+    accept: "application/pdf"
+  }];
 
   constructor(){}
 
   ngOnInit(): void {
-    this.InitRequiredDocuments();
+    //this.InitRequiredDocuments();
     this.changePaymentMethod.subscribe((e:any) => {
+      console.log(e)
       this.paymentMethod = e;
-      this.InitRequiredDocuments();
+      this.InitRequiredDocumentsV2();
+      // this.InitRequiredDocuments();
     });
     this.setPartialXML.subscribe((e:any) => {
       this.documentsRequired[0].fileName = e.file.name;
@@ -96,6 +125,53 @@ export class UploadDocumentsComponent implements OnInit {
           fileName: undefined,
           accept: "application/pdf"
         });
+      }
+    }
+  }
+
+  InitRequiredDocumentsV2() {
+    if (this.paymentMethod === null) this.documentsRequired = [];
+    if (this.paymentMethod !== null || this.paymentMethod !== undefined || this.paymentMethod !== "") {
+      if (this.paymentMethod === "ESTADO DE CUENTA" || this.paymentMethod === "IMPUESTOS") {
+        if (this.documentsRequired.length >= 1) {
+          for (let i = 0; i < this.documentsRequired.length; i++) {
+            if (this.documentsRequired[i] && this.documentsRequired[i].controlName === "invoiceXML") this.documentsRequired.splice(i, 1);
+            if (this.documentsRequired[i] && this.documentsRequired[i].controlName === "invoicePDF") this.documentsRequired.splice(i, 1);
+            if (this.documentsRequired[i] && this.documentsRequired[i].controlName === "voucherOfPayment") this.documentsRequired.splice(i, 1);
+            if (this.documentsRequired[i] && this.documentsRequired[i].controlName === "partialPDF") this.documentsRequired.splice(i, 1);
+            if (this.documentsRequired[i] && this.documentsRequired[i].controlName === "partialXML") this.documentsRequired.splice(i, 1);
+          }
+        }
+        if (this.paymentMethod === "ESTADO DE CUENTA") this.documentsRequired = this.documentsOfstatements;
+        if (this.paymentMethod === "IMPUESTOS") this.documentsRequired = this.documentsOfTax;
+      } else if (this.paymentMethod === "CLIENTE (INGRESO)" || this.paymentMethod === "PROVEEDOR (EGRESO)" || this.paymentMethod === "PPD" || this.paymentMethod === "PUE") {
+        if (this.paymentMethod === "PPD") {
+          this.documentsRequired = this.documentsOfPayment;
+          this.documentsRequired.push({
+            type: "Complemento1 (XML)",
+            controlName: "partialXML",
+            size: undefined,
+            realSize: undefined,
+            file: undefined,
+            fileName: undefined,
+            accept: ".xml"
+          },
+          {
+            type: "Complemento1 (PDF)",
+            controlName: "partialPDF",
+            size: undefined,
+            realSize: undefined,
+            file: undefined,
+            fileName: undefined,
+            accept: "application/pdf"
+          });
+        } else if (this.paymentMethod === "PUE") {
+          this.documentsRequired = this.documentsOfPayment;
+          for (let i = 0; i < this.documentsRequired.length; i++) {
+            if (this.documentsRequired[i].controlName === "partialXML") this.documentsRequired.splice(i, 1);
+            if (this.documentsRequired[i].controlName === "partialPDF") this.documentsRequired.splice(i, 1);
+          }
+        }
       }
     }
   }

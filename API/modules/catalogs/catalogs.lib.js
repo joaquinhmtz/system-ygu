@@ -1,6 +1,7 @@
 let ProfileScheme = require("./../models/profiles.scheme");
 let EnterpriseScheme = require("./../models/enterprise.scheme");
 let ClientScheme = require("./../models/client.scheme");
+let BankScheme = require("./../models/bank.scheme");
 
 const GetProfiles = async (data) => {
     try {
@@ -38,6 +39,19 @@ const GetClients = async (data) => {
     }
 }
 
+const GetBanks = async (data) => {
+    try {
+        let banks = await BankScheme.find({});
+
+        return banks;
+
+    } catch (e) {
+        console.log("Err GetBanks: ", e);
+        throw new Error(e);
+    }
+}
+
 module.exports.GetProfiles = GetProfiles;
 module.exports.GetEnterprises = GetEnterprises;
 module.exports.GetClients = GetClients;
+module.exports.GetBanks = GetBanks;

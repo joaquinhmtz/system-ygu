@@ -69,56 +69,68 @@
                             <div>
                                 {{ item.invoice.typeInvoice || '-' }}
                             </div>
-                            <div>
+                            <div *ngIf="item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)'">
                                 <b>{{ item.client.name || '-' }}</b>
+                            </div>
+                            <div *ngIf="item.invoice.typeInvoice === 'ESTADO DE CUENTA'">
+                                <b>{{ item.bank?.name || '-' }}</b>
+                            </div>
+                            <div *ngIf="item.invoice.typeInvoice === 'IMPUESTOS'">
+                                <b>{{ item.entity?.name || '-' }}</b>
                             </div>
                         </div>
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <div class="flex flex-col">
-                            <div>
+                            <div *ngIf="item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)'">
                                 <b>{{ item.invoice?.invoiceFolio || '-' }}</b>
                             </div>
-                            <div>
+                            <div *ngIf="item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)'">
                                 <b>{{ item.paymentMethod || '-' }}</b>
+                            </div>
+                            <div *ngIf="item.invoice.typeInvoice === 'ESTADO DE CUENTA' || item.invoice.typeInvoice === 'IMPUESTOS'">
+                                <b>{{ item.invoice?.statementMonth || '-' }}</b>
                             </div>
                             <div>
                                 {{ (item.invoice.invoiceDate | date: 'dd/MM/yyyy') || '-' }}
                             </div>
-                            <div>
+                            <div *ngIf="item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)'">
                                 ${{ (item.total | number:'1.0-0') || '0' }}
+                            </div>
+                            <div *ngIf="item.invoice.typeInvoice === 'IMPUESTOS'">
+                                <b>{{ item.invoice?.typeOfTax || '-' }}</b>
                             </div>
                         </div>
                     </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <div class="flex flex-col">
-                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF !== 0">
+                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF !== 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.invoicePDF)">Factura (PDF)</a>
                                 <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.invoicePDF)">
                                     <i class="fas fa-download"></i>
                                 </a>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF === 0">
+                            <div class="flex justify-between" *ngIf="item.documents?.invoicePDF === 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <span>Factura (PDF)</span>
                                 <i class="fas fa-times-circle"></i>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML !== 0">
+                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML !== 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.invoiceXML)">Factura (XML)</a>
                                 <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.invoiceXML)">
                                     <i class="fas fa-download"></i>
                                 </a>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML === 0">
+                            <div class="flex justify-between" *ngIf="item.documents?.invoiceXML === 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <span>Factura (XML)</span>
                                 <i class="fas fa-times-circle"></i>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment !== 0">
+                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment !== 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.voucherOfPayment)">Comprobante (PDF)</a>
                                 <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.voucherOfPayment)">
                                     <i class="fas fa-download"></i>
                                 </a>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment === 0">
+                            <div class="flex justify-between" *ngIf="item.documents?.voucherOfPayment === 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <span>Comprobante (PDF)</span>
                                 <i class="fas fa-times-circle"></i>
                             </div>
@@ -128,18 +140,50 @@
                                     <i class="fas fa-download"></i>
                                 </a>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialPDF === 0">
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialPDF === 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <span>Complemento1 (PDF)</span>
                                 <i class="fas fa-times-circle"></i>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML !== 0">
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML !== 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.partialXML)">Complemento1 (XML)</a>
                                 <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.partialXML)">
                                     <i class="fas fa-download"></i>
                                 </a>
                             </div>
-                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML === 0">
+                            <div class="flex justify-between" *ngIf="item.paymentMethod === 'PPD' && item.documents?.partialXML === 0 && (item.invoice.typeInvoice === 'CLIENTE (INGRESO)' || item.invoice.typeInvoice === 'PROVEEDOR (EGRESO)')">
                                 <span>Complemento1 (XML)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <!--ESTADO DE CUENTA-->
+                            <div class="flex justify-between" *ngIf="item.documents?.documentStatementPDF !== 0 && item.documents?.documentStatementPDF !== undefined && item.invoice.typeInvoice === 'ESTADO DE CUENTA'">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.documentStatementPDF)">Archivo (PDF)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.documentStatementPDF)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="(item.documents?.documentStatementPDF === 0 || item.documents?.documentStatementPDF === undefined) && item.invoice.typeInvoice === 'ESTADO DE CUENTA'">
+                                <span>Archivo (PDF)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <!--IMPUESTOS-->
+                            <div class="flex justify-between" *ngIf="item.documents?.paymentDocumentPDF !== 0 && item.documents?.paymentDocumentPDF !== undefined && item.invoice.typeInvoice === 'IMPUESTOS'">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.paymentDocumentPDF)">Archivo de pago (PDF)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.paymentDocumentPDF)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="(item.documents?.paymentDocumentPDF === 0 || item.documents?.paymentDocumentPDF === undefined) && item.invoice.typeInvoice === 'IMPUESTOS'">
+                                <span>Archivo de pago (PDF)</span>
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="flex justify-between" *ngIf="item.documents?.calculingDocumentPDF !== 0 && item.documents?.calculingDocumentPDF !== undefined && item.invoice.typeInvoice === 'IMPUESTOS'">
+                                <a class="cursor-pointer hover:underline mt-2" (click)="View(item.documents?.calculingDocumentPDF)">Archivo de cálculo (PDF)</a>
+                                <a class="cursor-pointer hover:underline mt-2" (click)="Download(item.documents?.calculingDocumentPDF)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            <div class="flex justify-between" *ngIf="(item.documents?.calculingDocumentPDF === 0 || item.documents?.calculingDocumentPDF === undefined) && item.invoice.typeInvoice === 'IMPUESTOS'">
+                                <span>Archivo de cálculo (PDF)</span>
                                 <i class="fas fa-times-circle"></i>
                             </div>
                         </div>

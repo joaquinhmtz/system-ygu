@@ -1,0 +1,255 @@
+<div class="container my-10 flex flex-col min-w-0 break-words w-full shadow-lg rounded-lg bg-blueGray-100 border-0">
+    <div class="rounded-t bg-white mb-0 px-6 py-6">
+        <div class="text-center flex justify-between">
+            <h6 class="text-blueGray-700 text-xl font-bold">Nuevo movimiento</h6>
+        </div>
+    </div> 
+    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+        <form [formGroup]="movementForm" autocomplete="off">
+            <div class="flex flex-wrap mt-5">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Empresa
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.enterprises"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        name="fEnterprise"
+                        placeholder="Selecciona una empresa"
+                        notFoundText="No se encontraron empresas."
+                        formControlName="enterprise"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2" *ngIf="band.typeInvoice === 'entry' || band.typeInvoice === 'output'">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Cliente
+                    </h5>
+                    <div class="flex">
+                        <ng-select
+                            [items]="catalogs.clients"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            bindLabel="name"
+                            name="fclient"
+                            placeholder="Selecciona un cliente"
+                            notFoundText="No se encontraron clientes."
+                            formControlName="client"
+                            class="border-0 bg-white rounded shadow mt-1 w-full"
+                            autocomplete="false"
+                            *ngIf="!band.newClient"
+                                >
+                        </ng-select>
+                        <input #client type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="client" placeholder="Ej. Hanna Suárez"
+                        *ngIf="band.newClient"  />
+
+                        <button class="mt-1 text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150" type="button" *ngIf="!band.lock" (click)="band.newClient = !band.newClient"><i class="fas" [ngClass]="{ 'fa-times': band.newClient, 'fa-plus': !band.newClient }" ></i></button>
+                    </div>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2" *ngIf="band.typeInvoice === 'statement'">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Banco
+                    </h5>
+                    <div class="flex">
+                        <ng-select
+                            [items]="catalogs.banks"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            bindLabel="name"
+                            name="fbank"
+                            placeholder="Selecciona un banco"
+                            notFoundText="No se encontraron bancos."
+                            formControlName="bank"
+                            class="border-0 bg-white rounded shadow mt-1 w-full"
+                            autocomplete="false"
+                            *ngIf="!band.newBank"
+                                >
+                        </ng-select>
+                        <input #bank type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="bank" placeholder="Ej. BBVA"
+                        *ngIf="band.newBank"  />
+
+                        <button class="mt-1 text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150" type="button" *ngIf="!band.lock" (click)="band.newBank = !band.newBank"><i class="fas" [ngClass]="{ 'fa-times': band.newBank, 'fa-plus': !band.newBank }" ></i></button>
+                    </div>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2" *ngIf="band.typeInvoice === 'taxation'">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Entidad
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.entities"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        name="fentity"
+                        placeholder="Selecciona una entidad"
+                        notFoundText="No se encontraron entidades."
+                        formControlName="entity"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+                </div>
+            </div>
+            <div class="flex flex-wrap mt-2" formGroupName="invoice">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Tipo de facturación
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.billingTypes"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fbillingType"
+                        placeholder="Selecciona un tipo de facturación"
+                        notFoundText="No se encontraron tipos de facturación."
+                        formControlName="typeInvoice"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                        (change)="ChangeForm(); SendForChooseDocumentsRequired(movementForm.controls['invoice'].controls['typeInvoice'].value)"
+                            >
+                    </ng-select>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Fecha de movimiento
+                    </h5>
+                    <input type="date"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="invoiceDate" placeholder="Ej. (ISR, IVA, Banco, etc)"  />
+                </div>
+                <div class="w-full lg:w-6/12 pr-4 mb-2" *ngIf="band.typeInvoice === 'statement' || band.typeInvoice === 'taxation'">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Mes estado de cuenta
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.months"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fstatementMonth"
+                        placeholder="Selecciona un tipo de mes"
+                        notFoundText="No se encontraron meses."
+                        formControlName="statementMonth"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2" *ngIf="band.typeInvoice === 'taxation'">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Tipo de impuesto
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.types"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="ftypeOfTax"
+                        placeholder="Selecciona un tipo de impuesto"
+                        notFoundText="No se encontraron tipos de impuestos."
+                        formControlName="typeOfTax"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+                </div>
+            </div>
+            <div class="flex flex-wrap mt-2" *ngIf="band.typeInvoice === 'statement' || band.typeInvoice === 'taxation'">
+                <div class="w-full mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Observaciones
+                    </h5>
+
+                    <textarea
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="observations" placeholder="Ej. Observaciones generales" >
+                    </textarea>
+                </div>
+            </div>
+            <div class="flex flex-wrap mt-2" *ngIf="band.typeInvoice === 'entry' || band.typeInvoice === 'output'">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Tipo de comprobante
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.typeReceipts"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fbillingType"
+                        placeholder="Selecciona un tipo de comprobante"
+                        notFoundText="No se encontraron tipos de comprobantes."
+                        formControlName="typeReceipt"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                            >
+                    </ng-select>
+                </div>
+                <div class="w-full lg:w-6/12 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Tipo de método de pago
+                    </h5>
+                    <ng-select
+                        [items]="catalogs.paymentMethods"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        bindLabel="name"
+                        bindValue="name" 
+                        name="fbillingType"
+                        placeholder="Selecciona un tipo de métodos de pago"
+                        notFoundText="No se encontraron tipos de métodos de pago."
+                        formControlName="paymentMethod"
+                        class="border-0 bg-white rounded shadow mt-1"
+                        autocomplete="false"
+                        (change)="SendForChooseDocumentsRequired(movementForm.controls.paymentMethod.value)"
+                            >
+                    </ng-select>
+                </div>
+            </div>
+            <div class="flex flex-wrap mt-2" *ngIf="band.typeInvoice === 'entry' || band.typeInvoice === 'output'">
+                <div class="w-full lg:w-6/12 pr-4 mb-2">
+                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                        Total
+                    </h5>
+                    <input type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="total" placeholder="Ej. $100.00"  />
+                </div>
+            </div>
+
+            <app-upload-documents
+            [paymentMethod]="movementForm.value.paymentMethod"
+            [changePaymentMethod]="changePaymentMethod"
+            [setUrlFile]="setUrlFile"
+            [setPartialXML]="setPartialXML"
+            (sendFiles)="SetFiles($event)"
+            (sendDeleteFile)="DeleteFile($event)"
+            (setUrlFile)="SendUrlFile($event)">
+            </app-upload-documents>
+
+            <hr class="mt-6 border-b-1 border-blueGray-300">
+            <div class="flex justify-end mt-10">
+                <button class="text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"
+                routerLink="/app/archive">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </button>
+                <button type="button" (click)="SaveMovement()" class="bg-emerald-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 ml-5">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

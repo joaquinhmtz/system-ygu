@@ -2,6 +2,7 @@ const path = require('path');
 const rootPath = path.normalize(__dirname + '/../../');
 let MovementLib = require("./movements.lib");
 let ClientLib = require("./../clients/clients.lib");
+let BankLib = require("./../banks/banks.lib");
 let EnterpriseLib = require("./../enterprises/enterprises.lib");
 let GlobalUtils = require("./../utils/global.utils");
 
@@ -49,10 +50,21 @@ const DeleteFile = async (req, res, next) => {
 const SaveMovement = async (req, res, next) => {
     try {
         let data = req.body;
-        let existClient = await ClientLib.GetClient({ rfc: data.client.rfc });
-        if (existClient === null || data.newClient) {
-            let client = await ClientLib.SaveClient(data.client);
-            data.client["_id"] = client._id;
+        console.log(data.invoice)
+        if (data.invoice.typeInvoice === "CLIENTE (INGRESO)" || data.invoice.typeInvoice === "PROVEEDOR (EGRESO)") {
+            console.log("aqui entraaa")
+            let existClient = await ClientLib.GetClient({ rfc: data.client.rfc });
+            if (existClient === null || data.newClient) {
+                let client = await ClientLib.SaveClient(data.client);
+                data.client["_id"] = client._id;
+            }
+        }
+        if (data.newBank) {
+            let existBank = await BankLib.GetBank({ name: data.bank.name.toUpperCase() });
+            if (!existBank) {
+                let bank = await BankLib.SaveBank(data.bank);
+                data.bank["_id"] = bank._id;
+            }
         }
         let existEnterprise = await EnterpriseLib.GetEnterprise({ rfc: data.enterprise.rfc });
         if (existEnterprise === null) {
