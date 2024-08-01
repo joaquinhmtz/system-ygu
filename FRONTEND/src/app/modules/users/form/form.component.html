@@ -40,16 +40,16 @@
                 </div>
                 <div class="w-full lg:w-6/12 px-4 mb-2">
                     <div class="relative w-full mb-3">
-                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2 required" htmlFor="grid-password">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                             Apellido materno
                         </label>
                         <input type="text"
                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             formControlName="lastname2" placeholder="Ej. Martínez" />
 
-                        <div *ngIf="userForm.controls['lastname2'].invalid && (userForm.controls['lastname2'].dirty || userForm.controls['lastname2'].touched)">
+                        <!-- <div *ngIf="userForm.controls['lastname2'].invalid && (userForm.controls['lastname2'].dirty || userForm.controls['lastname2'].touched)">
                             <span class="text-sm text-red-500 mt-1" *ngIf="userForm.controls['lastname2'].errors.required">El apellido materno es requerido</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -62,16 +62,16 @@
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-6/12 px-4 mb-2">
                     <div class="relative w-full mb-3">
-                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2 required" htmlFor="grid-password">
+                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                             Correo electrónico
                         </label>
                         <input type="text"
                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             formControlName="email" placeholder="Ej. pedro@ygu.com" [pattern]="patternEmail" />
 
-                        <div *ngIf="userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched)">
+                        <!-- <div *ngIf="userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched)">
                             <span class="text-sm text-red-500 mt-1" *ngIf="userForm.controls['email'].errors.required">El correo electrónico es requerido</span>
-                        </div>
+                        </div> -->
                         <div *ngIf="userForm.controls['email'].errors && userForm.controls['email'].errors?.pattern">
                             <span class="text-sm text-red-500 mt-1">El formato no es válido </span>
                         </div>

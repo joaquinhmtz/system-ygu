@@ -16,9 +16,11 @@ let MovementScheme = new Scheme({
         rfc: { type: String, trim: true, uppercase: true },
     },
     entity: { 
+        _id: { type: Scheme.Types.ObjectId },
         name: { type: String, trim: true, uppercase: true }
     },
     bank: {
+        _id: { type: Scheme.Types.ObjectId },
         name: { type: String, trim: true, uppercase: true }
     },
     observations: { type: String, trim: true, uppercase: true },

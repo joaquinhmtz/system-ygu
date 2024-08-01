@@ -14,7 +14,6 @@ const GetBank = async (data) => {
 
 const SaveBank = async (data) => {
     try {
-        console.log("bank**",data)
         let bank = new BankScheme(data);
         let save = await bank.save();
 

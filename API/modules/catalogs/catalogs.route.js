@@ -6,4 +6,6 @@ module.exports = (app, router) => {
     router.get("/api/v1/catalogs/enterprises",[middlewareToken], CatalogCtrl.GetEnterprises);
     router.get("/api/v1/catalogs/clients",[middlewareToken], CatalogCtrl.GetClients);
     router.get("/api/v1/catalogs/banks",[middlewareToken], CatalogCtrl.GetBanks);
+    router.get("/api/v1/catalogs/typesOfTax",[middlewareToken], CatalogCtrl.GetTypesOfTax);
+    router.get("/api/v1/catalogs/entities",[middlewareToken], CatalogCtrl.GetEntities);
 }

@@ -24,18 +24,20 @@ export class FormManualComponent implements OnInit {
     clients: [],
     billingTypes : [{ name: "CLIENTE (INGRESO)" }, { name: "PROVEEDOR (EGRESO)" }, { name: "ESTADO DE CUENTA" },  { name: "IMPUESTOS" }],
     banks: [],
-    entities: [{ name: "SAT" }, { name: "IMSS" }],
+    entities: [],
     months: [{ name: "ENERO" }, { name: "FEBRERO" }, { name: "MARZO" }, { name: "ABRIL" }, { name: "MAYO" }, { name: "JUNIO" }, { name: "JULIO" }, 
       { name: "AGOSTO" }, { name: "SEPTIEMBRE" }, { name: "OCTUBRE" }, { name: "NOVIEMBRE" }, { name: "DICIEMBRE" }
     ],
-    types: [{ name: "ISR" }, { name: "IVA" }, { name: "3% SOBRE NÓMINA" }],
+    types: [],
     paymentMethods: [{ name: "PPD" }, { name: "PUE" }],
     typeReceipts: [{ name: "FACTURA" }, { name: "COMPLEMENTO" }],
   };
   band: any = {
     newClient: false,
     typeInvoice: undefined,
-    newBank: undefined
+    newBank: undefined,
+    newTypeOfTax: undefined,
+    newEntity: undefined
   }
 
   constructor(
@@ -84,6 +86,17 @@ export class FormManualComponent implements OnInit {
           name: bank
         });
       }
+    } else if (this.band.typeInvoice === "taxation") {
+      let entity = this.movementForm.controls["entity"].value;
+      if (!this.band.newEntity) {
+        this.movementForm.controls["entity"].setValue({
+          name: entity.name
+        });
+      } else {
+        this.movementForm.controls["entity"].setValue({
+          name: entity
+        });
+      }
     }
     
     let date = new Date(this.movementForm.controls["invoice"].controls["invoiceDate"].value);
@@ -92,6 +105,8 @@ export class FormManualComponent implements OnInit {
     this.movementForm.controls["invoice"].controls["invoiceDate"].setValue(date);
     if (this.band.newClient) this.movementForm.controls["newClient"].setValue(true);
     if (this.band.newBank) this.movementForm.controls["newBank"].setValue(true);
+    if (this.band.newTypeOfTax) this.movementForm.controls["newTypeOfTax"].setValue(true);
+    if (this.band.newEntity) this.movementForm.controls["newEntity"].setValue(true);
 
     this.swal.confirmContent("¿Desea registrar el movimiento?", this.BuildSwalHTML(), (result:any) => {
       if (result.value) {
@@ -177,6 +192,8 @@ export class FormManualComponent implements OnInit {
         this.movementForm.controls["total"].setValue(undefined);
       break;
       case "IMPUESTOS":
+        this.GetCatalogTypesOfTax();
+        this.GetCatalogEntity();
         this.band.typeInvoice = "taxation";
         this.movementForm.controls["client"].setValue(undefined);
         this.movementForm.controls["typeReceipt"].setValue(undefined);
@@ -236,6 +253,24 @@ export class FormManualComponent implements OnInit {
       });
   }
 
+  GetCatalogTypesOfTax() {
+    this.http.HTTP_GET("/api/v1/catalogs/typesOfTax")
+      .subscribe((res:any) => {
+        this.catalogs.types = res;
+      }, (err) => {
+        this.session.CheckError(err);
+      });
+  }
+
+  GetCatalogEntity() {
+    this.http.HTTP_GET("/api/v1/catalogs/entities")
+      .subscribe((res:any) => {
+        this.catalogs.entities = res;
+      }, (err) => {
+        this.session.CheckError(err);
+      });
+  }
+
   initForm() {
     this.movementForm = this.formBuilder.group({
       enterprise: new FormControl(undefined),
@@ -273,7 +308,9 @@ export class FormManualComponent implements OnInit {
         fullname: new FormControl(undefined)
       }),
       newClient: new FormControl(false),
-      newBank: new FormControl(false)
+      newBank: new FormControl(false),
+      newTypeOfTax: new FormControl(false),
+      newEntity: new FormControl(false)
     });
   }
 

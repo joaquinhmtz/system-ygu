@@ -4,6 +4,7 @@ let MovementLib = require("./movements.lib");
 let ClientLib = require("./../clients/clients.lib");
 let BankLib = require("./../banks/banks.lib");
 let EnterpriseLib = require("./../enterprises/enterprises.lib");
+let ExtraLib = require("./../extras/extras.lib");
 let GlobalUtils = require("./../utils/global.utils");
 
 const ReadXML = async (req, res, next) => {
@@ -64,6 +65,19 @@ const SaveMovement = async (req, res, next) => {
             if (!existBank) {
                 let bank = await BankLib.SaveBank(data.bank);
                 data.bank["_id"] = bank._id;
+            }
+        }
+        if (data.newTypeOfTax) {
+            let existTypeTax = await ExtraLib.GetTypeOfTax({ name: data.invoice.typeOfTax.toUpperCase() });
+            if (!existTypeTax) {
+                let typeTax = await ExtraLib.SaveTypeOfTax(data.invoice.typeOfTax);
+            }
+        }
+        if (data.newEntity) {
+            let existEntity = await ExtraLib.GetEntity({ name: data.entity.name.toUpperCase() });
+            if (!existEntity) {
+                let entity = await ExtraLib.SaveEntity(data.entity);
+                data.entity["_id"] = entity._id;
             }
         }
         let existEnterprise = await EnterpriseLib.GetEnterprise({ rfc: data.enterprise.rfc });

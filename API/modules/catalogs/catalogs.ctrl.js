@@ -52,7 +52,35 @@ const GetBanks = async (req, res, next) => {
     }
 }
 
+const GetTypesOfTax = async (req, res, next) => {
+    try {
+        let data = req.query;
+        let results = await CatalogLib.GetTypeOfTaxList(data);
+
+        res.status(200).send(results);
+
+    } catch (e) {
+        console.log("Error - GetTypesOfTax: ", e);
+        next(e);
+    }
+}
+
+const GetEntities = async (req, res, next) => {
+    try {
+        let data = req.query;
+        let results = await CatalogLib.GetEntities(data);
+
+        res.status(200).send(results);
+
+    } catch (e) {
+        console.log("Error - GetEntities: ", e);
+        next(e);
+    }
+}
+
 module.exports.GetProfiles = GetProfiles;
 module.exports.GetEnterprises = GetEnterprises;
 module.exports.GetClients = GetClients;
 module.exports.GetBanks = GetBanks;
+module.exports.GetTypesOfTax = GetTypesOfTax;
+module.exports.GetEntities = GetEntities;

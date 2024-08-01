@@ -83,19 +83,29 @@
                     <h5 class="text-blueGray-400 uppercase font-bold text-xs">
                         Entidad
                     </h5>
-                    <ng-select
-                        [items]="catalogs.entities"
-                        [multiple]="false"
-                        [closeOnSelect]="true"
-                        bindLabel="name"
-                        name="fentity"
-                        placeholder="Selecciona una entidad"
-                        notFoundText="No se encontraron entidades."
-                        formControlName="entity"
-                        class="border-0 bg-white rounded shadow mt-1"
-                        autocomplete="false"
-                            >
-                    </ng-select>
+                    <div class="flex">
+                        <ng-select
+                            [items]="catalogs.entities"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            bindLabel="name"
+                            name="fentity"
+                            placeholder="Selecciona una entidad"
+                            notFoundText="No se encontraron entidades."
+                            formControlName="entity"
+                            class="border-0 bg-white rounded shadow mt-1 w-full"
+                            autocomplete="false"
+                            *ngIf="!band.newEntity"
+                                >
+                        </ng-select>
+                        <input #typeTax type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="entity" placeholder="Ej. IMSS"
+                        *ngIf="band.newEntity"  />
+
+                        <button class="mt-1 text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150" type="button" *ngIf="!band.lock" (click)="band.newEntity = !band.newEntity"><i class="fas" [ngClass]="{ 'fa-times': band.newEntity, 'fa-plus': !band.newEntity }" ></i></button>
+                    </div>
+                    
                 </div>
             </div>
             <div class="flex flex-wrap mt-2" formGroupName="invoice">
@@ -150,20 +160,29 @@
                     <h5 class="text-blueGray-400 uppercase font-bold text-xs">
                         Tipo de impuesto
                     </h5>
-                    <ng-select
-                        [items]="catalogs.types"
-                        [multiple]="false"
-                        [closeOnSelect]="true"
-                        bindLabel="name"
-                        bindValue="name" 
-                        name="ftypeOfTax"
-                        placeholder="Selecciona un tipo de impuesto"
-                        notFoundText="No se encontraron tipos de impuestos."
-                        formControlName="typeOfTax"
-                        class="border-0 bg-white rounded shadow mt-1"
-                        autocomplete="false"
-                            >
-                    </ng-select>
+                    <div class="flex">
+                        <ng-select
+                            [items]="catalogs.types"
+                            [multiple]="false"
+                            [closeOnSelect]="true"
+                            bindLabel="name"
+                            bindValue="name" 
+                            name="ftypeOfTax"
+                            placeholder="Selecciona un tipo de impuesto"
+                            notFoundText="No se encontraron tipos de impuestos."
+                            formControlName="typeOfTax"
+                            class="border-0 bg-white rounded shadow mt-1 w-full"
+                            autocomplete="false"
+                            *ngIf="!band.newTypeOfTax"
+                                >
+                        </ng-select>
+                        <input #typeTax type="text"
+                        class="mt-1 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        formControlName="typeOfTax" placeholder="Ej. ISR"
+                        *ngIf="band.newTypeOfTax"  />
+
+                        <button class="mt-1 text-blueGray-500 bg-transparent border border-solid border-blueGray-500 hover:bg-blueGray-500 hover:text-black active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 ease-linear transition-all duration-150" type="button" *ngIf="!band.lock" (click)="band.newTypeOfTax = !band.newTypeOfTax"><i class="fas" [ngClass]="{ 'fa-times': band.newTypeOfTax, 'fa-plus': !band.newTypeOfTax }" ></i></button>
+                    </div>
                 </div>
             </div>
             <div class="flex flex-wrap mt-2" *ngIf="band.typeInvoice === 'statement' || band.typeInvoice === 'taxation'">
