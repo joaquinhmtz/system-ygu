@@ -65,11 +65,13 @@ export class FormManualComponent implements OnInit {
     if (this.band.typeInvoice === "entry" || this.band.typeInvoice === "output") {
       let client = this.movementForm.controls["client"].value;
       if (!this.band.newClient) {
-        this.movementForm.controls["client"].setValue({
-          name: client.name,
-          rfc: client.rfc,
-          cfdi: client.cfdi
-        });
+        if (client !== undefined || client !== "" || client !== null) {
+          this.movementForm.controls["client"].setValue({
+            name: client.name,
+            rfc: client.rfc,
+            cfdi: client.cfdi
+          });
+        }
       } else {
         this.movementForm.controls["client"].setValue({
           name: client
@@ -78,9 +80,11 @@ export class FormManualComponent implements OnInit {
     } else if (this.band.typeInvoice === "statement") {
       let bank = this.movementForm.controls["bank"].value;
       if (!this.band.newBank) {
-        this.movementForm.controls["bank"].setValue({
-          name: bank.name
-        });
+        if (bank !== undefined || bank !== "" || bank !== null) {
+          this.movementForm.controls["bank"].setValue({
+            name: bank.name
+          });
+        }
       } else {
         this.movementForm.controls["bank"].setValue({
           name: bank
@@ -89,9 +93,11 @@ export class FormManualComponent implements OnInit {
     } else if (this.band.typeInvoice === "taxation") {
       let entity = this.movementForm.controls["entity"].value;
       if (!this.band.newEntity) {
-        this.movementForm.controls["entity"].setValue({
-          name: entity.name
-        });
+        if (entity !== undefined || entity !== "" || entity !== null) {
+          this.movementForm.controls["entity"].setValue({
+            name: entity.name
+          });
+        }
       } else {
         this.movementForm.controls["entity"].setValue({
           name: entity
