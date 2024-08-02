@@ -70,7 +70,7 @@ const SaveMovement = async (req, res, next) => {
         if (data.newTypeOfTax) {
             let existTypeTax = await ExtraLib.GetTypeOfTax({ name: data.invoice.typeOfTax.toUpperCase() });
             if (!existTypeTax) {
-                let typeTax = await ExtraLib.SaveTypeOfTax(data.invoice.typeOfTax);
+                let typeTax = await ExtraLib.SaveTypeOfTax({ name: data.invoice.typeOfTax });
             }
         }
         if (data.newEntity) {
